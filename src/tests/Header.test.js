@@ -1,8 +1,12 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../helpers/renderWithRouter';
 import App from '../App';
+
+const PROFILE_TOP_BTN = 'profile-top-btn';
+const PAGE_TITLE = 'page-title';
+const SEARCH_TOP_BTN = 'search-top-btn';
 
 describe('9 - Implemente os elementos do header na tela principal de receitas,'
   + 'respeitando os atributos descritos no protótipo', () => {
@@ -10,9 +14,9 @@ describe('9 - Implemente os elementos do header na tela principal de receitas,'
     const { history } = renderWithRouter(<App />);
     history.push('/comidas');
 
-    const profileTopBtn = screen.getByTestId('profile-top-btn');
-    const pageTitle = screen.getByTestId('page-title');
-    const searchTopBtn = screen.getByTestId('search-top-btn');
+    const profileTopBtn = screen.getByTestId(PROFILE_TOP_BTN);
+    const pageTitle = screen.getByTestId(PAGE_TITLE);
+    const searchTopBtn = screen.getByTestId(SEARCH_TOP_BTN);
 
     expect(profileTopBtn).toBeInTheDocument();
     expect(pageTitle).toBeInTheDocument();
@@ -23,9 +27,9 @@ describe('9 - Implemente os elementos do header na tela principal de receitas,'
 describe('10 - Implemente um ícone para a tela de perfil,'
   + 'um título e um ícone para a busca, caso exista no protótipo (hasNoHeader)', () => {
   const hasNoHeader = () => {
-    expect(screen.getByTestId('profile-top-btn')).not.toBeInTheDocument();
-    expect(screen.getByTestId('page-title')).not.toBeInTheDocument();
-    expect(screen.getByTestId('search-top-btn')).not.toBeInTheDocument();
+    expect(screen.getByTestId(PROFILE_TOP_BTN)).not.toBeInTheDocument();
+    expect(screen.getByTestId(PAGE_TITLE)).not.toBeInTheDocument();
+    expect(screen.getByTestId(SEARCH_TOP_BTN)).not.toBeInTheDocument();
   };
 
   it('Não tem header na tela de login', () => {
@@ -61,15 +65,15 @@ describe('10 - Implemente um ícone para a tela de perfil,'
 describe('10 - Implemente um ícone para a tela de perfil,'
   + 'um título e um ícone para a busca, caso exista no protótipo (hasHeader)', () => {
   const hasHeader = (title, withSearchButton = true) => {
-    const profileTopBtn = screen.getByTestId('profile-top-btn');
+    const profileTopBtn = screen.getByTestId(PROFILE_TOP_BTN);
     expect(profileTopBtn).toHaveAttribute('src', 'profileIcon');
-    expect(screen.getByTestId('page-title').textContent).toBe(title);
+    expect(screen.getByTestId(PAGE_TITLE).textContent).toBe(title);
 
     if (withSearchButton) {
-      const searchTopBtn = screen.getByTestId('search-top-btn');
+      const searchTopBtn = screen.getByTestId(SEARCH_TOP_BTN);
       expect(searchTopBtn).toHaveAttribute('src', 'searchIcon');
     } else {
-      expect(screen.getByTestId('search-top-btn')).not.toBeInTheDocument();
+      expect(screen.getByTestId(SEARCH_TOP_BTN)).not.toBeInTheDocument();
     }
   };
 
@@ -147,12 +151,40 @@ describe('11 - Redirecione a pessoa usuária para a tela de perfil'
     const { history } = renderWithRouter(<App />);
     history.push('/comidas');
 
-    const pageTitle = screen.getByTestId('page-title').textContent;
+    const pageTitle = screen.getByTestId(PAGE_TITLE).textContent;
     expect(pageTitle).toBe('Comidas');
 
-    const profileTopBtn = screen.getByTestId('profile-top-btn');
+    const profileTopBtn = screen.getByTestId(PROFILE_TOP_BTN);
     userEvent.click(profileTopBtn);
 
     expect(pageTitle).toBe('Perfil');
+  });
+});
+
+describe('12 - Desenvolva o botão de busca que, ao ser clicado,'
+  + 'a barra de busca deve aparecer. O mesmo serve para escondê-la', () => {
+  it('Ao clicar no botão de busca pela primeira vez a barra de busca aparece', () => {
+    const { history } = renderWithRouter(<App />);
+    history.push('/comidas');
+
+    const searchInput = screen.getByTestId('search-input');
+    expect(searchInput).not.toBeInTheDocument();
+    const searchTopBtn = screen.getByTestId(SEARCH_TOP_BTN);
+    userEvent.click(searchTopBtn);
+    expect(searchInput).toBeInTheDocument();
+  });
+
+  it('Ao clicar no botão de busca pela segunda vez a barra de busca desaparece', () => {
+    const { history } = renderWithRouter(<App />);
+    history.push('/comidas');
+
+    cy.get('[data-testid="search-input"]');
+    const searchTopBtn = screen.getByTestId(SEARCH_TOP_BTN);
+    userEvent.click(searchTopBtn);
+    const searchInput = screen.getByTestId('search-input');
+    expect(searchInput).toBeInTheDocument();
+
+    userEvent.click(searchTopBtn);
+    expect(searchInput).not.toBeInTheDocument();
   });
 });
