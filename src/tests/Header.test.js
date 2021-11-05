@@ -140,3 +140,19 @@ describe('10 - Implemente um ícone para a tela de perfil,'
     hasHeader('Receitas Favoritas', false);
   });
 });
+
+describe('11 - Redirecione a pessoa usuária para a tela de perfil'
+  + ' ao clicar no botão de perfil', () => {
+  it('A mudança de tela ocorre corretamente', () => {
+    const { history } = renderWithRouter(<App />);
+    history.push('/comidas');
+
+    const pageTitle = screen.getByTestId('page-title').textContent;
+    expect(pageTitle).toBe('Comidas');
+
+    const profileTopBtn = screen.getByTestId('profile-top-btn');
+    userEvent.click(profileTopBtn);
+
+    expect(pageTitle).toBe('Perfil');
+  });
+});
