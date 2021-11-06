@@ -25,6 +25,9 @@ function Login() {
       <label htmlFor="emailInput">
         Email:
         <input
+        // Pattern from:
+        // https://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_input_pattern3
+        // https://www.w3schools.com/tags/att_input_pattern.asp
           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
           onChange={ ({ target }) => saveEmail(target.value) }
           data-testid="email-input"
