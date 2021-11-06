@@ -167,15 +167,15 @@ describe('7 - Salve o e-mail da pessoa usuária no localStorage na chave'
 
     expect(submitBtn).toBeDisabled();
 
-    let user = localStorage.getItem('user');
+    let user = JSON.parse(localStorage.getItem('user'));
     expect(user).toBe(null);
 
     userEvent.type(emailInput, CORRECT_EMAIL);
     userEvent.type(password, CORRECT_PASSWORD);
     userEvent.click(submitBtn);
 
-    user = localStorage.getItem('user');
-    expect(user).toBe(CORRECT_EMAIL);
+    user = JSON.parse(localStorage.getItem('user'));
+    expect(user).toStrictEqual({ email: CORRECT_EMAIL });
   });
 });
 
@@ -193,7 +193,7 @@ describe('8 - Redirecione a pessoa usuária para a tela principal '
 
     expect(submitBtn).toBeDisabled();
 
-    const user = localStorage.getItem('user');
+    const user = JSON.parse(localStorage.getItem('user'));
     expect(user).toBe(null);
 
     userEvent.type(emailInput, CORRECT_EMAIL);
