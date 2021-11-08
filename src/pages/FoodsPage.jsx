@@ -3,10 +3,7 @@ import Header from '../components/Header';
 
 function FoodsPage() {
   return (
-    <>
-      <Header />
-      <p>Comidas</p>
-    </>
+    <Header title="Comidas" />
   );
 }
 

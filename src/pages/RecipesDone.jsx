@@ -1,9 +1,10 @@
 import React from 'react';
+import Header from '../components/Header';
 
 function RecipesDone() {
   return (
     <div>
-      RecipesDone
+      <Header title="Receitas Feitas" hasBtn={ false } />
     </div>
   );
 }
