@@ -1,8 +1,9 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../helpers/renderWithRouter';
 import App from '../App';
+import Login from '../pages/Login';
 
 const EMAIL_INPUT = 'email-input';
 const PASSWORD_INPUT = 'password-input';
@@ -16,12 +17,15 @@ const INCORRECT_PASSWORD = '123456';
 
 describe('2 - Crie todos os elementos que devem respeitar'
   + 'os atributos descritos no protótipo para a tela de login', () => {
+  afterEach(() => {
+    cleanup();
+  });
   it('Tem os data-testids email-input, password-input e login-submit-btn', () => {
     renderWithRouter(<App />);
 
-    const emailInput = screen.getAllByTestId(EMAIL_INPUT);
-    const password = screen.getAllByTestId(PASSWORD_INPUT);
-    const submitBtn = screen.getAllByTestId(LOGIN_SUBMIT_BTN);
+    const emailInput = screen.getByTestId(EMAIL_INPUT);
+    const password = screen.getByTestId(PASSWORD_INPUT);
+    const submitBtn = screen.getByTestId(LOGIN_SUBMIT_BTN);
 
     expect(emailInput).toBeInTheDocument();
     expect(password).toBeInTheDocument();
@@ -31,10 +35,13 @@ describe('2 - Crie todos os elementos que devem respeitar'
 
 describe('3 - Desenvolva a tela de maneira que a pessoa deve'
  + ' conseguir escrever seu email no input de email', () => {
+  afterEach(() => {
+    cleanup();
+  });
   it('É possível escrever o email', () => {
     renderWithRouter(<App />);
 
-    const emailInput = screen.getAllByTestId(EMAIL_INPUT);
+    const emailInput = screen.getByTestId(EMAIL_INPUT);
     userEvent.type(emailInput, CORRECT_EMAIL);
 
     expect(emailInput).toHaveValue(CORRECT_EMAIL);
@@ -43,10 +50,13 @@ describe('3 - Desenvolva a tela de maneira que a pessoa deve'
 
 describe('4 - Desenvolva a tela de maneira que a pessoa'
 + 'deve conseguir escrever sua senha no input de senha', () => {
+  afterEach(() => {
+    cleanup();
+  });
   it('É possível escrever a senha', () => {
     renderWithRouter(<App />);
 
-    const password = screen.getAllByTestId(PASSWORD_INPUT);
+    const password = screen.getByTestId(PASSWORD_INPUT);
     userEvent.type(password, CORRECT_PASSWORD);
 
     expect(password).toHaveValue(CORRECT_PASSWORD);
@@ -56,155 +66,141 @@ describe('4 - Desenvolva a tela de maneira que a pessoa'
 describe('5 - Desenvolva a tela de maneira que o formulário'
 + 'só seja válido após um email válido e uma senha de mais'
 + ' de 6 caracteres serem preenchidos', () => {
+  afterEach(() => {
+    cleanup();
+  });
   it('O botão deve estar desativado se o email for inválido', () => {
     renderWithRouter(<App />);
 
-    const emailInput = screen.getAllByTestId(EMAIL_INPUT);
-    const password = screen.getAllByTestId(PASSWORD_INPUT);
-    const submitBtn = screen.getAllByTestId(LOGIN_SUBMIT_BTN);
+    const emailInput = screen.getByTestId(EMAIL_INPUT);
+    const password = screen.getByTestId(PASSWORD_INPUT);
+    const submitBtn = screen.getByTestId(LOGIN_SUBMIT_BTN);
 
-    expect(submitBtn).toBeDisable();
+    expect(submitBtn).toBeDisabled();
 
     userEvent.type(emailInput, INCORRECT_EMAIL_1);
     userEvent.type(password, CORRECT_PASSWORD);
-    expect(submitBtn).toBeDisable();
+    expect(submitBtn).toBeDisabled();
 
     userEvent.type(emailInput, INCORRECT_EMAIL_2);
-    expect(submitBtn).toBeDisable();
+    expect(submitBtn).toBeDisabled();
   });
 
   it('O botão deve estar desativado se a senha deve tiver 6 caracteres ou menos', () => {
     renderWithRouter(<App />);
-    const emailInput = screen.getAllByTestId(EMAIL_INPUT);
-    const password = screen.getAllByTestId(PASSWORD_INPUT);
-    const submitBtn = screen.getAllByTestId(LOGIN_SUBMIT_BTN);
+    const emailInput = screen.getByTestId(EMAIL_INPUT);
+    const password = screen.getByTestId(PASSWORD_INPUT);
+    const submitBtn = screen.getByTestId(LOGIN_SUBMIT_BTN);
 
-    expect(submitBtn).toBeDisable();
+    expect(submitBtn).toBeDisabled();
 
     userEvent.type(emailInput, CORRECT_EMAIL);
     userEvent.type(password, INCORRECT_PASSWORD);
-    expect(submitBtn).toBeDisable();
+    expect(submitBtn).toBeDisabled();
 
-    expect(submitBtn).toBeDisable();
+    expect(submitBtn).toBeDisabled();
   });
 
   it('O botão deve estar ativado se o email e a senha forem válidos', () => {
     renderWithRouter(<App />);
-    const emailInput = screen.getAllByTestId(EMAIL_INPUT);
-    const password = screen.getAllByTestId(PASSWORD_INPUT);
-    const submitBtn = screen.getAllByTestId(LOGIN_SUBMIT_BTN);
+    const emailInput = screen.getByTestId(EMAIL_INPUT);
+    const password = screen.getByTestId(PASSWORD_INPUT);
+    const submitBtn = screen.getByTestId(LOGIN_SUBMIT_BTN);
 
-    expect(submitBtn).toBeDisable();
+    expect(submitBtn).toBeDisabled();
 
     userEvent.type(emailInput, CORRECT_EMAIL);
     userEvent.type(password, CORRECT_PASSWORD);
 
-    expect(submitBtn).not.toBeDisable();
+    expect(submitBtn).not.toBeDisabled();
   });
 });
 
 describe('6 - Salve 2 tokens no localStorage após a submissão, '
   + 'identificados pelas chaves mealsToken e cocktailsToken', () => {
+  afterEach(() => {
+    cleanup();
+  });
   it('Após a submissão mealsToken e cocktailsToken devem estar '
-  + 'salvos em localStorage', async () => {
+  + 'salvos em localStorage', () => {
     beforeEach(() => {
       localStorage.clear();
     });
-    renderWithRouter(<App />);
+    renderWithRouter(<Login />);
 
-    const emailInput = screen.getAllByTestId(EMAIL_INPUT);
-    const password = screen.getAllByTestId(PASSWORD_INPUT);
-    const submitBtn = screen.getAllByTestId(LOGIN_SUBMIT_BTN);
+    const emailInput = screen.getByTestId(EMAIL_INPUT);
+    const password = screen.getByTestId(PASSWORD_INPUT);
+    const submitBtn = screen.getByTestId(LOGIN_SUBMIT_BTN);
 
-    await waitFor(
-      () => {
-        const mealsToken = localStorage.getItem('mealsToken');
-        const cocktailsToken = localStorage.getItem('cocktailsToken');
-        expect(mealsToken).toBe(null);
-        expect(cocktailsToken).toBe(null);
-      }, { timeout: 3000 },
-    );
+    let mealsToken = localStorage.getItem('mealsToken');
+    let cocktailsToken = localStorage.getItem('cocktailsToken');
+    expect(mealsToken).toBe(null);
+    expect(cocktailsToken).toBe(null);
 
     userEvent.type(emailInput, CORRECT_EMAIL);
     userEvent.type(password, CORRECT_PASSWORD);
 
     userEvent.click(submitBtn);
 
-    await waitFor(
-      () => {
-        const mealsToken = localStorage.getItem('mealsToken');
-        const cocktailsToken = localStorage.getItem('cocktailsToken');
-        expect(mealsToken).toBe('1');
-        expect(cocktailsToken).toBe('1');
-      }, { timeout: 3000 },
-    );
+    mealsToken = localStorage.getItem('mealsToken');
+    cocktailsToken = localStorage.getItem('cocktailsToken');
+    expect(mealsToken).toBe('1');
+    expect(cocktailsToken).toBe('1');
   });
 });
 
 describe('7 - Salve o e-mail da pessoa usuária no localStorage na chave'
 + ' user após a submissão', () => {
-  it('Após a submissão a chave user deve estar salva em localStorage', async () => {
+  afterEach(() => {
+    cleanup();
+  });
+  it('Após a submissão a chave user deve estar salva em localStorage', () => {
     beforeEach(() => {
       localStorage.clear();
     });
+
     renderWithRouter(<App />);
 
-    const emailInput = screen.getAllByTestId(EMAIL_INPUT);
-    const password = screen.getAllByTestId(PASSWORD_INPUT);
-    const submitBtn = screen.getAllByTestId(LOGIN_SUBMIT_BTN);
+    const emailInput = screen.getByTestId(EMAIL_INPUT);
+    const password = screen.getByTestId(PASSWORD_INPUT);
+    const submitBtn = screen.getByTestId(LOGIN_SUBMIT_BTN);
 
-    expect(submitBtn).toBeDisable();
+    expect(submitBtn).toBeDisabled();
 
-    await waitFor(
-      () => {
-        const user = localStorage.getItem('user');
-        expect(user).toBe(null);
-      }, { timeout: 3000 },
-    );
+    let user = JSON.parse(localStorage.getItem('user'));
+    expect(user).toBe(null);
 
     userEvent.type(emailInput, CORRECT_EMAIL);
     userEvent.type(password, CORRECT_PASSWORD);
     userEvent.click(submitBtn);
 
-    await waitFor(
-      () => {
-        const user = localStorage.getItem('user');
-        expect(user).toBe(CORRECT_EMAIL);
-      }, { timeout: 3000 },
-    );
+    user = JSON.parse(localStorage.getItem('user'));
+    expect(user).toStrictEqual({ email: CORRECT_EMAIL });
   });
 });
 
 describe('8 - Redirecione a pessoa usuária para a tela principal '
 + 'de receitas de comidas após a submissão e validação com sucesso do login', () => {
-  it('A rota muda para a tela principal de receitas de comidas', async () => {
+  it('A rota muda para a tela principal de receitas de comidas', () => {
     beforeEach(() => {
       localStorage.clear();
     });
-    const { history } = renderWithRouter(<App />);
+    const { history } = renderWithRouter(<Login />);
 
-    const emailInput = screen.getAllByTestId(EMAIL_INPUT);
-    const password = screen.getAllByTestId(PASSWORD_INPUT);
-    const submitBtn = screen.getAllByTestId(LOGIN_SUBMIT_BTN);
+    const emailInput = screen.getByTestId(EMAIL_INPUT);
+    const password = screen.getByTestId(PASSWORD_INPUT);
+    const submitBtn = screen.getByTestId(LOGIN_SUBMIT_BTN);
 
-    expect(submitBtn).toBeDisable();
+    expect(submitBtn).toBeDisabled();
 
-    await waitFor(
-      () => {
-        const user = localStorage.getItem('user');
-        expect(user).toBe(null);
-      }, { timeout: 3000 },
-    );
+    const user = JSON.parse(localStorage.getItem('user'));
+    expect(user).toBe(null);
 
     userEvent.type(emailInput, CORRECT_EMAIL);
     userEvent.type(password, CORRECT_PASSWORD);
     userEvent.click(submitBtn);
 
-    await waitFor(
-      () => {
-        const { locaction: { pathname } } = history;
-        expect(pathname).toBe('/comidas');
-      }, { timeout: 3000 },
-    );
+    const { location: { pathname } } = history;
+    expect(pathname).toBe('/comidas');
   });
 });
