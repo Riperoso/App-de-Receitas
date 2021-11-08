@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import P from 'prop-types';
 import { Link } from 'react-router-dom';
-import profileImg from '../images/profileIcon.svg';
-import searchImg from '../images/searchIcon.svg';
+import profileIcon from '../images/profileIcon.svg';
+import searchIcon from '../images/searchIcon.svg';
 
 function Header({ title = '', hasBtn = true }) {
   const [inputIsVisible, setInputIsVisible] = useState(false);
@@ -18,7 +18,7 @@ function Header({ title = '', hasBtn = true }) {
         <button
           type="button"
         >
-          <img data-testid="profile-top-btn" src={ profileImg } alt="Profile" />
+          <img data-testid="profile-top-btn" src={ profileIcon } alt="Profile" />
         </button>
       </Link>
 
@@ -29,7 +29,7 @@ function Header({ title = '', hasBtn = true }) {
             type="button"
             onClick={ () => setInputIsVisible((pState) => setInputIsVisible(!pState)) }
           >
-            <img data-testid="search-top-btn" src={ searchImg } alt="Search" />
+            <img data-testid="search-top-btn" src={ searchIcon } alt="Search" />
           </button>
         )
       }

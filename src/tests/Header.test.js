@@ -3,6 +3,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../helpers/renderWithRouter';
 import App from '../App';
+import Header from '../components/Header';
 
 const PROFILE_TOP_BTN = 'profile-top-btn';
 const PAGE_TITLE = 'page-title';
@@ -11,8 +12,7 @@ const SEARCH_TOP_BTN = 'search-top-btn';
 describe('9 - Implemente os elementos do header na tela principal de receitas,'
   + 'respeitando os atributos descritos no protótipo', () => {
   it('Tem os data-testids profile-top-btn, page-title e search-top-btn', () => {
-    const { history } = renderWithRouter(<App />);
-    history.push('/comidas');
+    renderWithRouter(<Header />);
 
     const profileTopBtn = screen.getByTestId(PROFILE_TOP_BTN);
     const pageTitle = screen.getByTestId(PAGE_TITLE);
@@ -178,7 +178,6 @@ describe('12 - Desenvolva o botão de busca que, ao ser clicado,'
     const { history } = renderWithRouter(<App />);
     history.push('/comidas');
 
-    cy.get('[data-testid="search-input"]');
     const searchTopBtn = screen.getByTestId(SEARCH_TOP_BTN);
     userEvent.click(searchTopBtn);
     const searchInput = screen.getByTestId('search-input');
