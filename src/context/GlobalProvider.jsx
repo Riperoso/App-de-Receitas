@@ -6,6 +6,7 @@ import { reducer } from '../reducer/reducer';
 const INITIAL_STATE = {
   search: '',
   option: '',
+  inputIsVisible: false,
 };
 
 function GlobalProvider({ children }) {
@@ -17,6 +18,24 @@ function GlobalProvider({ children }) {
       switch (option) {
       case 'ingredient': {
         const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${search}`);
+        const json = await response.json();
+        dispatch({
+          type: 'SAVE_RETURN',
+          payload: json,
+        });
+        break;
+      }
+      case 'name': {
+        const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${search}`);
+        const json = await response.json();
+        dispatch({
+          type: 'SAVE_RETURN',
+          payload: json,
+        });
+        break;
+      }
+      case 'initialLetter': {
+        const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${search}`);
         const json = await response.json();
         dispatch({
           type: 'SAVE_RETURN',
