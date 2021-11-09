@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import P from 'prop-types';
 import { Link } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
+import GlobalContext from '../context/GlobalContext';
+import { SET_SEARCH } from '../reducer/reducer';
 
 function Header({ title = '', hasBtn = true }) {
   const [inputIsVisible, setInputIsVisible] = useState(false);
   const [search, setSearch] = useState('');
   const [option, setOption] = useState('');
+  const { dispatch } = useContext(GlobalContext);
 
-  console.log(option);
+  const handleClick = () => {
+    dispatch({
+      type: SET_SEARCH,
+      payload: {
+        search,
+        option,
+      },
+    });
+  };
 
   const renderInput = () => (
     <form data-testid="search-input">
@@ -54,7 +65,7 @@ function Header({ title = '', hasBtn = true }) {
       <button
         type="button"
         data-testid="exec-search-btn"
-        onClick={ () => console.log(option, search) }
+        onClick={ () => handleClick() }
       >
         Buscar
       </button>
