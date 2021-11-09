@@ -8,6 +8,7 @@ export const reducer = (state, action) => {
       ...state,
       search: action.payload.search,
       option: action.payload.option,
+      pathName: action.payload.pathname,
     };
   case 'SAVE_RETURN':
     return {

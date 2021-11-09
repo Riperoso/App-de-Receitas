@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import GlobalContext from '../context/GlobalContext';
 import { SET_SEARCH } from '../reducer/reducer';
 
@@ -6,18 +7,22 @@ function SearchBar() {
   const [search, setSearch] = useState('');
   const [option, setOption] = useState('');
   const { state, dispatch } = useContext(GlobalContext);
-
+  const history = useHistory();
   const { inputIsVisible } = state;
+
+  const { location: { pathname } } = history;
 
   const handleClick = () => {
     if (option === 'initialLetter' && search.length > 1) {
       global.alert('Sua busca deve conter somente 1 (um) caracter');
     }
+    const param = pathname === '/bebidas' ? 'thecocktaildb' : 'themealdb';
     dispatch({
       type: SET_SEARCH,
       payload: {
         search,
         option,
+        pathname: param,
       },
     });
   };
