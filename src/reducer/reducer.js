@@ -13,7 +13,8 @@ export const reducer = (state, action) => {
   case 'SAVE_RETURN':
     return {
       ...state,
-      ingredientsList: action.payload,
+      ingredientsList: action.payload.json,
+      isLoading: action.payload.isLoading,
     };
   case SET_INVISIBLE:
     return {

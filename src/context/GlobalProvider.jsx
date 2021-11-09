@@ -8,6 +8,8 @@ const INITIAL_STATE = {
   option: '',
   inputIsVisible: false,
   pathName: '',
+  ingredientsList: '',
+  isLoading: true,
 };
 
 function GlobalProvider({ children }) {
@@ -22,7 +24,7 @@ function GlobalProvider({ children }) {
         const json = await response.json();
         dispatch({
           type: 'SAVE_RETURN',
-          payload: json,
+          payload: { json, isLoading: false },
         });
         break;
       }
@@ -31,7 +33,7 @@ function GlobalProvider({ children }) {
         const json = await response.json();
         dispatch({
           type: 'SAVE_RETURN',
-          payload: json,
+          payload: { json, isLoading: false },
         });
         break;
       }
@@ -40,7 +42,7 @@ function GlobalProvider({ children }) {
         const json = await response.json();
         dispatch({
           type: 'SAVE_RETURN',
-          payload: json,
+          payload: { json, isLoading: false },
         });
         break;
       }
