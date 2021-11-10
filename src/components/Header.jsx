@@ -6,9 +6,59 @@ import searchIcon from '../images/searchIcon.svg';
 
 function Header({ title = '', hasBtn = true }) {
   const [inputIsVisible, setInputIsVisible] = useState(false);
+  const [search, setSearch] = useState('');
+  const [option, setOption] = useState('');
+
+  console.log(option);
 
   const renderInput = () => (
-    <input data-testid="search-input" type="text" />
+    <form data-testid="search-input">
+      <input
+        value={ search }
+        type="text"
+        onChange={ ({ target }) => setSearch(target.value) }
+      />
+      <label htmlFor="ingredient">
+        <input
+          data-testid="ingredient-search-radio"
+          name="options-search"
+          type="radio"
+          id="ingredient"
+          value="ingredient"
+          onChange={ ({ target }) => setOption(target.value) }
+        />
+        Ingrediente
+      </label>
+      <label htmlFor="name">
+        <input
+          data-testid="name-search-radio"
+          name="options-search"
+          type="radio"
+          id="name"
+          value="name"
+          onChange={ ({ target }) => setOption(target.value) }
+        />
+        Nome
+      </label>
+      <label htmlFor="first-letter">
+        <input
+          data-testid="first-letter-search-radio"
+          name="options-search"
+          type="radio"
+          id="first-letter"
+          value="initialLetter"
+          onChange={ ({ target }) => setOption(target.value) }
+        />
+        Letra Inicial
+      </label>
+      <button
+        type="button"
+        data-testid="exec-search-btn"
+        onClick={ () => console.log(option, search) }
+      >
+        Buscar
+      </button>
+    </form>
   );
 
   return (
