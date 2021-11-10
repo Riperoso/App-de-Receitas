@@ -21,7 +21,7 @@ function GlobalProvider({ children }) {
       switch (option) {
       case 'ingredient': {
         const response = await fetch(`https://www.${pathName}.com/api/json/v1/1/filter.php?i=${search}`);
-        const json = await response.json();
+        const json = response.json();
         dispatch({
           type: SAVE_RETURN,
           payload: { json, isLoading: false },

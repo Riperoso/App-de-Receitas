@@ -21,9 +21,13 @@ function FoodsPage() {
 
   const renderFood = () => {
     if (state.isLoading === true) return <p>loading</p>;
-    return state.ingredientsList.meals.length === 1
-      ? history.push(`/comidas/${state.ingredientsList.meals[0].idMeal}`)
-      : renderCards(state.ingredientsList.meals);
+    if (state.ingredientsList.meals !== null) {
+      return state.ingredientsList.meals.length === 1
+        ? history.push(`/comidas/${state.ingredientsList.meals[0].idMeal}`)
+        : renderCards(state.ingredientsList.meals);
+    }
+    return global
+      .alert('Sinto muito, não encontramos nenhuma receita para esses filtros.');
   };
 
   return (

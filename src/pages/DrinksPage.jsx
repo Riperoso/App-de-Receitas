@@ -21,10 +21,13 @@ function DrinksPage() {
 
   const renderDrink = () => {
     if (state.isLoading === true) return <p>loading</p>;
-    console.log(state.ingredientsList);
-    return state.ingredientsList.drinks.length === 1
-      ? history.push(`/bebidas/${state.ingredientsList.drinks[0].idDrink}`)
-      : renderCards(state.ingredientsList.drinks);
+    if (state.ingredientsList.drinks !== null) {
+      return state.ingredientsList.drinks.length === 1
+        ? history.push(`/bebidas/${state.ingredientsList.drinks[0].idDrink}`)
+        : renderCards(state.ingredientsList.drinks);
+    }
+    return global
+      .alert('Sinto muito, não encontramos nenhuma receita para esses filtros.');
   };
 
   return (
