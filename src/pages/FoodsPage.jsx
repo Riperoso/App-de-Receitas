@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import Footer from '../components/Footer';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import GlobalContext from '../context/GlobalContext';
@@ -35,6 +36,7 @@ function FoodsPage() {
       <Header title="Comidas" />
       <SearchBar />
       {renderFood()}
+      <Footer />
     </>
   );
 }

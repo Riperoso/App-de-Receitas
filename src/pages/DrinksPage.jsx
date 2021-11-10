@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import GlobalContext from '../context/GlobalContext';
+import Footer from '../components/Footer';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import DrinkCard from '../components/DrinkCard';
@@ -35,6 +36,7 @@ function DrinksPage() {
       <Header title="Bebidas" />
       <SearchBar />
       {renderDrink()}
+      <Footer />
     </div>
   );
 }
