@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../helpers/renderWithRouter';
 import App from '../App';
 import Header from '../components/Header';
+import Login from '../pages/Login';
 
 const PROFILE_TOP_BTN = 'profile-top-btn';
 const PAGE_TITLE = 'page-title';
@@ -27,14 +28,14 @@ describe('9 - Implemente os elementos do header na tela principal de receitas,'
 describe('10 - Implemente um ícone para a tela de perfil,'
   + 'um título e um ícone para a busca, caso exista no protótipo (hasNoHeader)', () => {
   const hasNoHeader = () => {
-    expect(screen.getByTestId(PROFILE_TOP_BTN)).not.toBeInTheDocument();
-    expect(screen.getByTestId(PAGE_TITLE)).not.toBeInTheDocument();
-    expect(screen.getByTestId(SEARCH_TOP_BTN)).not.toBeInTheDocument();
+
   };
 
   it('Não tem header na tela de login', () => {
-    renderWithRouter(<App />);
-    hasNoHeader();
+    renderWithRouter(<Login />);
+    expect(screen.getByTestId(PROFILE_TOP_BTN)).toBeNull();
+    expect(getByTestId(PAGE_TITLE)).not.toBeInTheDocument();
+    expect(getByTestId(SEARCH_TOP_BTN)).not.toBeInTheDocument();
   });
 
   it('Não tem header na tela de detalhes de uma receita de comida', () => {

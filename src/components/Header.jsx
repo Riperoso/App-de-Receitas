@@ -1,65 +1,20 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import P from 'prop-types';
 import { Link } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
+import { SET_INVISIBLE } from '../reducer/reducer';
+import GlobalContext from '../context/GlobalContext';
 
 function Header({ title = '', hasBtn = true }) {
-  const [inputIsVisible, setInputIsVisible] = useState(false);
-  const [search, setSearch] = useState('');
-  const [option, setOption] = useState('');
+  const context = useContext(GlobalContext);
 
-  console.log(option);
-
-  const renderInput = () => (
-    <form data-testid="search-input">
-      <input
-        value={ search }
-        type="text"
-        onChange={ ({ target }) => setSearch(target.value) }
-      />
-      <label htmlFor="ingredient">
-        <input
-          data-testid="ingredient-search-radio"
-          name="options-search"
-          type="radio"
-          id="ingredient"
-          value="ingredient"
-          onChange={ ({ target }) => setOption(target.value) }
-        />
-        Ingrediente
-      </label>
-      <label htmlFor="name">
-        <input
-          data-testid="name-search-radio"
-          name="options-search"
-          type="radio"
-          id="name"
-          value="name"
-          onChange={ ({ target }) => setOption(target.value) }
-        />
-        Nome
-      </label>
-      <label htmlFor="first-letter">
-        <input
-          data-testid="first-letter-search-radio"
-          name="options-search"
-          type="radio"
-          id="first-letter"
-          value="initialLetter"
-          onChange={ ({ target }) => setOption(target.value) }
-        />
-        Letra Inicial
-      </label>
-      <button
-        type="button"
-        data-testid="exec-search-btn"
-        onClick={ () => console.log(option, search) }
-      >
-        Buscar
-      </button>
-    </form>
-  );
+  const handleClick = () => {
+    context.dispatch({
+      type: SET_INVISIBLE,
+      payload: !context.state.inputIsVisible,
+    });
+  };
 
   return (
     <header>
@@ -77,13 +32,12 @@ function Header({ title = '', hasBtn = true }) {
         && (
           <button
             type="button"
-            onClick={ () => setInputIsVisible((pState) => setInputIsVisible(!pState)) }
+            onClick={ () => handleClick() }
           >
             <img data-testid="search-top-btn" src={ searchIcon } alt="Search" />
           </button>
         )
       }
-      { inputIsVisible && renderInput() }
     </header>
   );
 }
