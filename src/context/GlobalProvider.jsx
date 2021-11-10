@@ -1,7 +1,7 @@
 import React, { useReducer, useEffect } from 'react';
 import P from 'prop-types';
 import GlobalContext from './GlobalContext';
-import { reducer } from '../reducer/reducer';
+import { reducer, SAVE_RETURN } from '../reducer/reducer';
 
 const INITIAL_STATE = {
   search: '',
@@ -23,7 +23,7 @@ function GlobalProvider({ children }) {
         const response = await fetch(`https://www.${pathName}.com/api/json/v1/1/filter.php?i=${search}`);
         const json = await response.json();
         dispatch({
-          type: 'SAVE_RETURN',
+          type: SAVE_RETURN,
           payload: { json, isLoading: false },
         });
         break;
@@ -32,7 +32,7 @@ function GlobalProvider({ children }) {
         const response = await fetch(`https://www.${pathName}.com/api/json/v1/1/search.php?s=${search}`);
         const json = await response.json();
         dispatch({
-          type: 'SAVE_RETURN',
+          type: SAVE_RETURN,
           payload: { json, isLoading: false },
         });
         break;
@@ -41,7 +41,7 @@ function GlobalProvider({ children }) {
         const response = await fetch(`https://www.${pathName}.com/api/json/v1/1/search.php?f=${search}`);
         const json = await response.json();
         dispatch({
-          type: 'SAVE_RETURN',
+          type: SAVE_RETURN,
           payload: { json, isLoading: false },
         });
         break;
@@ -50,7 +50,7 @@ function GlobalProvider({ children }) {
         break;
       }
     })();
-  }, [search, option]);
+  }, [search, option, pathName]);
 
   return (
     <GlobalContext.Provider

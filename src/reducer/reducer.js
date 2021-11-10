@@ -1,5 +1,6 @@
 export const SET_SEARCH = 'SET_SEARCH';
 export const SET_INVISIBLE = 'SET_INVISIBLE';
+export const SAVE_RETURN = 'SAVE_RETURN';
 
 export const reducer = (state, action) => {
   switch (action.type) {
@@ -10,7 +11,7 @@ export const reducer = (state, action) => {
       option: action.payload.option,
       pathName: action.payload.pathname,
     };
-  case 'SAVE_RETURN':
+  case SAVE_RETURN:
     return {
       ...state,
       ingredientsList: action.payload.json,
