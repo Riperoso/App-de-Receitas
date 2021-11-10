@@ -7,12 +7,12 @@ import { SET_INVISIBLE } from '../reducer/reducer';
 import GlobalContext from '../context/GlobalContext';
 
 function Header({ title = '', hasBtn = true }) {
-  const { state, dispatch } = useContext(GlobalContext);
+  const context = useContext(GlobalContext);
 
   const handleClick = () => {
-    dispatch({
+    context.dispatch({
       type: SET_INVISIBLE,
-      payload: !state.inputIsVisible,
+      payload: !context.state.inputIsVisible,
     });
   };
 
