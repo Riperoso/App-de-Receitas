@@ -8,13 +8,26 @@ const INITIAL_STATE = {
   option: '',
   inputIsVisible: false,
   pathName: '',
-  ingredientsList: '',
+  ingredientsList: [],
   isLoading: true,
 };
 
 function GlobalProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
   const { option, search, pathName } = state;
+
+  const fetchRecipes = async (param) => {
+      const response = await fetch(`https://www.${param}.com/api/json/v1/1/search.php?s=`);
+      const json = await response.json();
+      console.log("fetchRecipes", json)
+      dispatch({
+        type: SAVE_RETURN,
+        payload: {
+          json,
+          isLoading: false,
+        },
+      });
+  };
 
   useEffect(() => {
     (async () => {
@@ -54,7 +67,7 @@ function GlobalProvider({ children }) {
 
   return (
     <GlobalContext.Provider
-      value={ { state, dispatch } }
+      value={ { state, dispatch, fetchRecipes } }
     >
       { children }
     </GlobalContext.Provider>
