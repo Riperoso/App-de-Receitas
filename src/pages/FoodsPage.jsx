@@ -12,6 +12,22 @@ function FoodsPage() {
   const { state } = useContext(GlobalContext);
   const history = useHistory();
 
+  // useEffect(() => {
+  //   (async () => {
+  //     dispatch({
+  //       type: 'SET_LOADING',
+  //       payload: true,
+  //     });
+  //     const response = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+  //     const json = await response.json();
+  //     dispatch({
+  //       type: 'SET_LOADING',
+  //       payload: false,
+  //     });
+  //     setMeals({ ...json });
+  //   })();
+  // }, []);
+
   const renderCards = (recipes) => (
     recipes.map((recipe, id) => (
       id <= MAX_NUMBER

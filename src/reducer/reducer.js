@@ -22,6 +22,11 @@ export const reducer = (state, action) => {
       ...state,
       inputIsVisible: action.payload,
     };
+  case 'SET_LOADING':
+    return {
+      ...state,
+      isLoading: action.payload,
+    };
   default:
     return { ...state };
   }
