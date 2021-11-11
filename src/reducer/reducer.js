@@ -1,6 +1,7 @@
 export const SET_SEARCH = 'SET_SEARCH';
 export const SET_INVISIBLE = 'SET_INVISIBLE';
 export const SAVE_RETURN = 'SAVE_RETURN';
+export const SET_LOADING = 'SET_LOADING';
 
 export const reducer = (state, action) => {
   switch (action.type) {
@@ -22,7 +23,7 @@ export const reducer = (state, action) => {
       ...state,
       inputIsVisible: action.payload,
     };
-  case 'SET_LOADING':
+  case SET_LOADING:
     return {
       ...state,
       isLoading: action.payload,

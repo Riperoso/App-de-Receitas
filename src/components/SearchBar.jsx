@@ -25,6 +25,7 @@ function SearchBar() {
         pathname: param,
       },
     });
+    setSearch('');
   };
 
   return (

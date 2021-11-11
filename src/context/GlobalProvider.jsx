@@ -17,16 +17,15 @@ function GlobalProvider({ children }) {
   const { option, search, pathName } = state;
 
   const fetchRecipes = async (param) => {
-      const response = await fetch(`https://www.${param}.com/api/json/v1/1/search.php?s=`);
-      const json = await response.json();
-      console.log("fetchRecipes", json)
-      dispatch({
-        type: SAVE_RETURN,
-        payload: {
-          json,
-          isLoading: false,
-        },
-      });
+    const response = await fetch(`https://www.${param}.com/api/json/v1/1/search.php?s=`);
+    const json = await response.json();
+    dispatch({
+      type: SAVE_RETURN,
+      payload: {
+        json,
+        isLoading: false,
+      },
+    });
   };
 
   useEffect(() => {
@@ -34,7 +33,8 @@ function GlobalProvider({ children }) {
       switch (option) {
       case 'ingredient': {
         const response = await fetch(`https://www.${pathName}.com/api/json/v1/1/filter.php?i=${search}`);
-        const json = response.json();
+        const json = await response.json();
+        console.log(json);
         dispatch({
           type: SAVE_RETURN,
           payload: { json, isLoading: false },
