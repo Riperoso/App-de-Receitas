@@ -2,9 +2,17 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import '../css/recipeProgress.css';
 
 function FoodInProgress({ match: { params: { id } } }) {
   const [api, saveApi] = useState({});
+  const [check, setCheck] = useState({
+    ingredientName: '',
+    checked: '',
+  });
+
+  const { checked, ingredientName } = check;
+
   const apiFor = () => {
     const ingredientsList = [];
     const NUMBER_TWEENTY = 20;
@@ -14,7 +22,6 @@ function FoodInProgress({ match: { params: { id } } }) {
         ingredientsList.push(api.meals[0][str]);
       }
     }
-    console.log(ingredientsList);
     return ingredientsList;
   };
 
@@ -25,6 +32,10 @@ function FoodInProgress({ match: { params: { id } } }) {
       saveApi(resolve);
     })();
   }, [id]);
+
+  const handleClick = ({ target }) => {
+    setCheck({ ...check, ingredientName: target.name, checked: target.checked });
+  };
 
   const foodProgress = () => (
     <div>
@@ -48,11 +59,14 @@ function FoodInProgress({ match: { params: { id } } }) {
               data-testid={ `${index}-ingredient-step` }
               htmlFor={ ingredient }
               key={ `checkbox-${index}` }
+              className={ checked && ingredientName === ingredient && 'recipeProgress' }
             >
               {ingredient}
               <input
                 type="checkbox"
                 id={ ingredient }
+                name={ ingredient }
+                onClick={ handleClick }
               />
             </label>)
         ))}

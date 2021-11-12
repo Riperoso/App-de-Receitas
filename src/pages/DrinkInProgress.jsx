@@ -2,9 +2,17 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import '../css/recipeProgress.css';
 
 function DrinkInProgress({ match: { params: { id } } }) {
   const [api, saveApi] = useState({});
+  const [check, setCheck] = useState({
+    ingredientName: '',
+    checked: '',
+  });
+
+  const { checked, ingredientName } = check;
+
   const apiFor = () => {
     const ingredientsList = [];
     const NUMBER_TWEENTY = 20;
@@ -14,7 +22,6 @@ function DrinkInProgress({ match: { params: { id } } }) {
         ingredientsList.push(api.drinks[0][str]);
       }
     }
-    console.log(ingredientsList);
     return ingredientsList;
   };
 
@@ -25,6 +32,10 @@ function DrinkInProgress({ match: { params: { id } } }) {
       saveApi(resolve);
     })();
   }, [id]);
+
+  const handleClick = ({ target }) => {
+    setCheck({ ...check, ingredientName: target.name, checked: target.checked });
+  };
 
   const drinkProgress = () => (
     <div>
@@ -47,11 +58,14 @@ function DrinkInProgress({ match: { params: { id } } }) {
             data-testid={ `${index}-ingredient-step` }
             htmlFor={ `${index}-ingredient-step` }
             key={ index }
+            className={ checked && ingredientName === ingredient && 'recipeProgress' }
           >
             {ingredient}
             <input
               type="checkbox"
+              name={ ingredient }
               id={ `${index}-ingredient-step` }
+              onClick={ handleClick }
             />
           </label>)
       ))}
