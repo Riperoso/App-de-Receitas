@@ -5,17 +5,18 @@ import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import GlobalContext from '../context/GlobalContext';
 import RecipeCard from '../components/RecipeCard';
+import Filters from '../components/Filters';
 
 const MAX_NUMBER = 11;
 
 function FoodsPage() {
   const { state, fetchRecipes } = useContext(GlobalContext);
-  const { isLoading, ingredientsList } = state;
+  const { isLoading, ingredientsList, filters } = state;
   const history = useHistory();
 
   useEffect(() => {
     fetchRecipes('themealdb');
-  }, []);
+  }, [fetchRecipes]);
 
   const renderCards = (recipes) => (
     recipes.map((recipe, id) => (
@@ -27,7 +28,6 @@ function FoodsPage() {
 
   const renderFood = (recipes) => {
     if (recipes.meals !== null) {
-      console.log(recipes.meals);
       return recipes.meals.length === 1
         ? history.push(`/comidas/${recipes.meals[0].idMeal}`)
         : renderCards(recipes.meals);
@@ -35,12 +35,19 @@ function FoodsPage() {
     global.alert('Sinto muito, não encontramos nenhuma receita para esses filtros.');
   };
 
+  const renderFoodsAndFilters = (rec, filt) => (
+    <>
+      <Filters filters={ filt } param="meals" />
+      {renderFood(rec)}
+    </>
+  );
+
   return (
     <>
       <Header title="Comidas" />
       <SearchBar />
       {
-        !isLoading && renderFood(ingredientsList)
+        !isLoading && renderFoodsAndFilters(ingredientsList, filters)
       }
       <Footer />
     </>

@@ -10,6 +10,7 @@ const INITIAL_STATE = {
   pathName: '',
   ingredientsList: [],
   isLoading: true,
+  filters: [],
 };
 
 function GlobalProvider({ children }) {
@@ -18,12 +19,15 @@ function GlobalProvider({ children }) {
 
   const fetchRecipes = async (param) => {
     const response = await fetch(`https://www.${param}.com/api/json/v1/1/search.php?s=`);
+    const resFilters = await fetch(`https://www.${param}.com/api/json/v1/1/list.php?c=list`);
     const json = await response.json();
+    const jsonFilters = await resFilters.json();
     dispatch({
       type: SAVE_RETURN,
       payload: {
         json,
         isLoading: false,
+        jsonFilters,
       },
     });
   };

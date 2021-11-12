@@ -5,17 +5,18 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import DrinkCard from '../components/DrinkCard';
+import Filters from '../components/Filters';
 
 const MAX_NUMBER = 11;
 
 function DrinksPage() {
   const { state, fetchRecipes } = useContext(GlobalContext);
-  const { isLoading, ingredientsList } = state;
+  const { isLoading, ingredientsList, filters } = state;
   const history = useHistory();
 
   useEffect(() => {
     fetchRecipes('thecocktaildb');
-  }, []);
+  }, [fetchRecipes]);
 
   const renderCards = (drinks) => (
     drinks.map((recipe, id) => (
@@ -34,12 +35,19 @@ function DrinksPage() {
     global.alert('Sinto muito, não encontramos nenhuma receita para esses filtros.');
   };
 
+  const renderDrinksAndFilters = (cocktail, filt) => (
+    <>
+      <Filters filters={ filt } param="drinks" />
+      {renderDrink(cocktail)}
+    </>
+  );
+
   return (
     <div>
       <Header title="Bebidas" />
       <SearchBar />
       {
-        !isLoading && renderDrink(ingredientsList)
+        !isLoading && renderDrinksAndFilters(ingredientsList, filters)
       }
       <Footer />
     </div>
