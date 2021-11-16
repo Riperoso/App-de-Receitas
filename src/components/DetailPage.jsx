@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import RecomendationsCard from './RecomendationsCard';
 
-function DetailPage({ api, nameandMeasure }) {
+function DetailPage({ api, nameandMeasure, recomendations }) {
+  const MAX_RECOMENDATIONS = 6;
   return (
     <>
       <img data-testid="recipe-photo" src={ api.strMealThumb } alt={ api.Meal } />
@@ -16,8 +18,15 @@ function DetailPage({ api, nameandMeasure }) {
       </button>
       <h4 data-testid="recipe-category">{api.strCategory}</h4>
       <ul>
-        {nameandMeasure.map((ingredient) => <li key={ ingredient }>{ingredient}</li>)}
+        {nameandMeasure.map((ingredient, index) => (
+          <li
+            data-testid={ `${index}-ingredient-name-and-measure` }
+            key={ ingredient }
+          >
+            {ingredient}
+          </li>))}
       </ul>
+      <p data-testid="instructions">{api.strInstructions}</p>
       <div className="video-responsive">
         <iframe
           data-testid="video"
@@ -31,6 +40,17 @@ function DetailPage({ api, nameandMeasure }) {
           title="Embedded youtube"
         />
       </div>
+      <div>
+        {recomendations.drinks && recomendations.drinks.map((recomendation, index) => (
+          index < MAX_RECOMENDATIONS
+        && (<RecomendationsCard
+          key={ recomendation.strDrink }
+          img={ recomendation.strDrinkThumb }
+          title={ recomendation.strDrink }
+          index={ index }
+        />)
+        ))}
+      </div>
     </>
   );
 }
@@ -38,6 +58,7 @@ function DetailPage({ api, nameandMeasure }) {
 DetailPage.propTypes = {
   api: PropTypes.objectOf(PropTypes.string).isRequired,
   nameandMeasure: PropTypes.objectOf(PropTypes.string).isRequired,
+  recomendations: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 export default DetailPage;

@@ -1,19 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import DetailPageDrink from '../components/DetailPageDrink';
-import RecomendationsCard from '../components/RecomendationsCard';
 
 function DrinkPage({ match: { params: { id } } }) {
+  const history = useHistory();
+
   const [api, saveApi] = useState({});
   const [recomendations, setRecomendations] = useState({});
   const [loading, setLoading] = useState(true);
-  const MAX_RECOMENDATIONS = 6;
+  const [done, setDone] = useState(false);
+  const [progress, setprogress] = useState(false);
+
+  const getLocal = () => {
+    const doneLocal = JSON.parse(localStorage.getItem('doneRecipes'));
+    const findDone = doneLocal.find((recipeId) => recipeId.id === id);
+    const doneProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    const findinProgress = doneProgress.cocktails[id];
+    if (findDone !== undefined) setDone(true);
+    if (findinProgress !== undefined) setprogress(true);
+  };
 
   useEffect(() => {
     (async () => {
       const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
       const resolve = await response.json();
-      console.log(resolve);
+      getLocal();
       saveApi(resolve.drinks);
       setLoading(false);
     })();
@@ -42,22 +54,34 @@ function DrinkPage({ match: { params: { id } } }) {
     }
     return ingredientandMeasures;
   };
+
+  const saveLocal = () => {
+    const doneProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    const localProgress = { ...doneProgress,
+      cocktails:
+       { ...doneProgress.cocktails, [id]: nameandMeasures() } };
+    localStorage.setItem('inProgressRecipes', JSON.stringify(localProgress));
+    history.push(`/comidas/${id}/in-progress`);
+  };
+
   if (loading) return <h1>loading</h1>;
 
   return (
     <>
-      <DetailPageDrink api={ api[0] } nameandMeasure={ nameandMeasures() } />
+      <DetailPageDrink
+        api={ api[0] }
+        nameandMeasure={ nameandMeasures() }
+        recomendations={ recomendations }
+      />
       <div>
-        {recomendations.meals && recomendations.meals.map((recomendation, index) => (
-          index < MAX_RECOMENDATIONS
-        && (<RecomendationsCard
-          key={ recomendation.strMeal }
-          img={ recomendation.strMealThumb }
-          title={ recomendation.strMeal }
-          index={ index }
-        />)
-        ))}
-        <button type="button">Iniciar Receita</button>
+        <button
+          data-testid="start-recipe-btn"
+          className={ done && 'removeButton' }
+          onClick={ () => saveLocal() }
+          type="button"
+        >
+          { progress ? 'Continuar receita' : 'Iniciar Receita' }
+        </button>
       </div>
     </>
   );

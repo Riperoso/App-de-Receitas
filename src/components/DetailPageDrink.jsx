@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import RecomendationsCard from './RecomendationsCard';
 
-function DetailPageDrink({ api, nameandMeasure }) {
+function DetailPageDrink({ api, nameandMeasure, recomendations }) {
+  const MAX_RECOMENDATIONS = 6;
   return (
     <>
       <img data-testid="recipe-photo" src={ api.strDrinkThumb } alt={ api.Drink } />
@@ -18,6 +20,18 @@ function DetailPageDrink({ api, nameandMeasure }) {
       <ul>
         {nameandMeasure.map((ingredient) => <li key={ ingredient }>{ingredient}</li>)}
       </ul>
+      <p data-testid="instructions">{api.strInstructions}</p>
+      <div>
+        {recomendations.meals && recomendations.meals.map((recomendation, index) => (
+          index < MAX_RECOMENDATIONS
+        && (<RecomendationsCard
+          key={ recomendation.strMeal }
+          img={ recomendation.strMealThumb }
+          title={ recomendation.strMeal }
+          index={ index }
+        />)
+        ))}
+      </div>
     </>
   );
 }
@@ -25,6 +39,7 @@ function DetailPageDrink({ api, nameandMeasure }) {
 DetailPageDrink.propTypes = {
   api: PropTypes.objectOf(PropTypes.string).isRequired,
   nameandMeasure: PropTypes.objectOf(PropTypes.string).isRequired,
+  recomendations: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 export default DetailPageDrink;
