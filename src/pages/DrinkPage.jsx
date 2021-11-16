@@ -25,17 +25,11 @@ function DrinkPage({ match: { params: { id } } }) {
     (async () => {
       const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
       const resolve = await response.json();
+      const responseRec = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+      const resolveRec = await responseRec.json();
+      setRecomendations(resolveRec);
       saveApi(resolve.drinks);
       getLocal();
-      setLoading(false);
-    })();
-  }, [id]);
-
-  useEffect(() => {
-    (async () => {
-      const response = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
-      const resolve = await response.json();
-      setRecomendations(resolve);
       setLoading(false);
     })();
   }, []);
