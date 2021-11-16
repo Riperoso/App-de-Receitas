@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import DetailPage from '../components/DetailPage';
 import RecomendationsCard from '../components/RecomendationsCard';
 
@@ -60,5 +61,9 @@ function FoodPage({ match: { params: { id } } }) {
     </>
   );
 }
+
+FoodPage.propTypes = {
+  match: PropTypes.objectOf(PropTypes.string).isRequired,
+};
 
 export default FoodPage;

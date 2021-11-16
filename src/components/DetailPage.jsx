@@ -15,7 +15,7 @@ function DetailPage({ api, nameandMeasure }) {
       </button>
       <h4 data-testid="recipe-category">{api.strCategory}</h4>
       <ul>
-        {nameandMeasure.map((ingredient) => <li>{ingredient}</li>)}
+        {nameandMeasure.map((ingredient) => <li key={ ingredient }>{ingredient}</li>)}
       </ul>
       <div className="video-responsive">
         <iframe
@@ -33,5 +33,10 @@ function DetailPage({ api, nameandMeasure }) {
     </>
   );
 }
+
+DetailPage.propTypes = {
+  api: PropTypes.objectOf(PropTypes.string).isRequired,
+  nameandMeasure: PropTypes.objectOf(PropTypes.string).isRequired,
+};
 
 export default DetailPage;
