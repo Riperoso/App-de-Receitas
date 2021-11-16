@@ -2,8 +2,6 @@ import React from 'react';
 import P from 'prop-types';
 
 function DrinkCard({ drink, id }) {
-  console.log(drink);
-  console.log(`${id}-recipe-card}`);
   return (
     <div data-testid={ `${id}-recipe-card` }>
       <img

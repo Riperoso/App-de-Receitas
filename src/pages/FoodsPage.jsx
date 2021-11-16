@@ -1,16 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import GlobalContext from '../context/GlobalContext';
 import RecipeCard from '../components/RecipeCard';
+import Filters from '../components/Filters';
 
 const MAX_NUMBER = 11;
 
 function FoodsPage() {
-  const { state } = useContext(GlobalContext);
+  const { state, fetchRecipes } = useContext(GlobalContext);
+  const { isLoading, ingredientsList, filters } = state;
   const history = useHistory();
+
+  useEffect(() => {
+    fetchRecipes('themealdb');
+  }, []);
 
   const renderCards = (recipes) => (
     recipes.map((recipe, id) => (
@@ -20,22 +26,29 @@ function FoodsPage() {
     ))
   );
 
-  const renderFood = () => {
-    if (state.isLoading === true) return <p>loading</p>;
-    if (state.ingredientsList.meals !== null) {
-      return state.ingredientsList.meals.length === 1
-        ? history.push(`/comidas/${state.ingredientsList.meals[0].idMeal}`)
-        : renderCards(state.ingredientsList.meals);
+  const renderFood = (recipes) => {
+    if (recipes.meals !== null) {
+      return recipes.meals.length === 1
+        ? history.push(`/comidas/${recipes.meals[0].idMeal}`)
+        : renderCards(recipes.meals);
     }
-    return global
-      .alert('Sinto muito, não encontramos nenhuma receita para esses filtros.');
+    global.alert('Sinto muito, não encontramos nenhuma receita para esses filtros.');
   };
+
+  const renderFoodsAndFilters = (rec, filt) => (
+    <>
+      {renderFood(rec)}
+      <Filters filters={ filt } param="meals" />
+    </>
+  );
 
   return (
     <>
       <Header title="Comidas" />
       <SearchBar />
-      {renderFood()}
+      {
+        !isLoading && renderFoodsAndFilters(ingredientsList, filters)
+      }
       <Footer />
     </>
   );
