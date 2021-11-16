@@ -16,7 +16,7 @@ function FoodsPage() {
 
   useEffect(() => {
     fetchRecipes('themealdb');
-  }, [fetchRecipes]);
+  }, []);
 
   const renderCards = (recipes) => (
     recipes.map((recipe, id) => (
@@ -37,8 +37,8 @@ function FoodsPage() {
 
   const renderFoodsAndFilters = (rec, filt) => (
     <>
-      <Filters filters={ filt } param="meals" />
       {renderFood(rec)}
+      <Filters filters={ filt } param="meals" />
     </>
   );
 

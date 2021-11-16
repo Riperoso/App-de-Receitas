@@ -3,6 +3,7 @@ export const SET_INVISIBLE = 'SET_INVISIBLE';
 export const SAVE_RETURN = 'SAVE_RETURN';
 export const SET_LOADING = 'SET_LOADING';
 export const SET_FILTER = 'SET_FILTER';
+export const GET_FILTERED = 'GET_FILTER';
 
 export const reducer = (state, action) => {
   switch (action.type) {
@@ -29,6 +30,11 @@ export const reducer = (state, action) => {
     return {
       ...state,
       isLoading: action.payload,
+    };
+  case GET_FILTERED:
+    return {
+      ...state,
+      ingredientsList: action.payload.json,
     };
   default:
     return { ...state };

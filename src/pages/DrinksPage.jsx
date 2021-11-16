@@ -16,7 +16,7 @@ function DrinksPage() {
 
   useEffect(() => {
     fetchRecipes('thecocktaildb');
-  }, [fetchRecipes]);
+  }, []);
 
   const renderCards = (drinks) => (
     drinks.map((recipe, id) => (
