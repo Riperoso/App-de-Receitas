@@ -55,6 +55,7 @@ function FoodPage({ match: { params: { id } } }) {
           index={ index }
         />)
         ))}
+        <button type="button">Iniciar Receita</button>
       </div>
     </>
   );
