@@ -37,8 +37,8 @@ function FoodsPage() {
 
   const renderFoodsAndFilters = (rec, filt) => (
     <>
-      {renderFood(rec)}
       <Filters filters={ filt } param="meals" />
+      {renderFood(rec)}
     </>
   );
 

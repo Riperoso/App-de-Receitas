@@ -18,7 +18,7 @@ function DetailPage({ api, nameandMeasure, recomendations }) {
       </button>
       <h4 data-testid="recipe-category">{api.strCategory}</h4>
       <ul>
-        {nameandMeasure.map((ingredient, index) => (
+        {nameandMeasure().map((ingredient, index) => (
           <li
             data-testid={ `${index}-ingredient-name-and-measure` }
             key={ ingredient }

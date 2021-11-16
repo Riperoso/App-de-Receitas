@@ -18,7 +18,7 @@ function DetailPageDrink({ api, nameandMeasure, recomendations }) {
       </button>
       <h4 data-testid="recipe-category">{api.strCategory}</h4>
       <ul>
-        {nameandMeasure.map((ingredient) => <li key={ ingredient }>{ingredient}</li>)}
+        {nameandMeasure().map((ingredient) => <li key={ ingredient }>{ingredient}</li>)}
       </ul>
       <p data-testid="instructions">{api.strInstructions}</p>
       <div>

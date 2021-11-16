@@ -25,8 +25,8 @@ function DrinkPage({ match: { params: { id } } }) {
     (async () => {
       const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
       const resolve = await response.json();
-      getLocal();
       saveApi(resolve.drinks);
+      getLocal();
       setLoading(false);
     })();
   }, [id]);
@@ -70,7 +70,7 @@ function DrinkPage({ match: { params: { id } } }) {
     <>
       <DetailPageDrink
         api={ api[0] }
-        nameandMeasure={ nameandMeasures() }
+        nameandMeasure={ nameandMeasures }
         recomendations={ recomendations }
       />
       <div>
