@@ -39,7 +39,7 @@ function Filters({ filters, param }) {
   return (
     <div>
       {
-        renderButtons(filters[param])
+        filters !== undefined && renderButtons(filters[param])
       }
     </div>
   );

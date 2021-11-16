@@ -11,12 +11,21 @@ function FoodPage({ match: { params: { id } } }) {
   const [done, setDone] = useState(false);
   const [progress, setprogress] = useState(false);
 
+  const getLocal = () => {
+    const doneLocal = JSON.parse(localStorage.getItem('doneRecipes'));
+    const findDone = doneLocal.find((recipeId) => recipeId.id === id);
+    const doneProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    const findinProgress = doneProgress.meals[id];
+    if (findDone !== undefined) setDone(true);
+    if (findinProgress !== undefined) setprogress(true);
+  };
+
   useEffect(() => {
     (async () => {
       const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
       const resolve = await response.json();
-      getLocal();
       saveApi(resolve.meals);
+      getLocal();
       setLoading(false);
     })();
   }, [id]);
@@ -54,22 +63,13 @@ function FoodPage({ match: { params: { id } } }) {
     history.push(`/comidas/${id}/in-progress`);
   };
 
-  const getLocal = () => {
-    const doneLocal = JSON.parse(localStorage.getItem('doneRecipes'));
-    const findDone = doneLocal.find((recipeId) => recipeId.id === id);
-    const doneProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    const findinProgress = doneProgress.meals[id];
-    if (findDone !== undefined) setDone(true);
-    if (findinProgress !== undefined) setprogress(true);
-  };
-
   if (loading) return <h1>loading</h1>;
 
   return (
     <>
       <DetailPage
         api={ api[0] }
-        nameandMeasure={ nameandMeasures() }
+        nameandMeasure={ nameandMeasures }
         recomendations={ recomendations }
       />
       <div>
