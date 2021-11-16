@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
-function DetailPage({ api, nameandMeasure }) {
+function DetailPageDrink({ api, nameandMeasure }) {
   return (
     <>
-      <img data-testid="recipe-photo" src={ api.strMealThumb } alt={ api.Meal } />
-      <h2 data-testid="recipe-title">{api.strMeal}</h2>
+      <img data-testid="recipe-photo" src={ api.strDrinkThumb } alt={ api.Drink } />
+      <h2 data-testid="recipe-title">{api.strDrink}</h2>
       <button type="button" data-testid="share-btn">
         <img src={ shareIcon } alt="botão de compartilhar" />
       </button>
@@ -18,26 +18,13 @@ function DetailPage({ api, nameandMeasure }) {
       <ul>
         {nameandMeasure.map((ingredient) => <li key={ ingredient }>{ingredient}</li>)}
       </ul>
-      <div className="video-responsive">
-        <iframe
-          data-testid="video"
-          width="853"
-          height="480"
-          src={ `https://www.youtube.com/embed/${api.strYoutube.split('=')[1]}` }
-          frameBorder="0"
-          allow={ `accelerometer; autoplay; clipboard-write;
-            encrypted-media; gyroscope; picture-in-picture` }
-          allowFullScreen
-          title="Embedded youtube"
-        />
-      </div>
     </>
   );
 }
 
-DetailPage.propTypes = {
+DetailPageDrink.propTypes = {
   api: PropTypes.objectOf(PropTypes.string).isRequired,
   nameandMeasure: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
-export default DetailPage;
+export default DetailPageDrink;
