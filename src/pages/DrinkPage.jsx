@@ -1,25 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import DetailPageDrink from '../components/DetailPageDrink';
+import GlobalContext from '../context/GlobalContext';
 
 function DrinkPage({ match: { params: { id } } }) {
   const history = useHistory();
+  const { getLocal, done, progress } = useContext(GlobalContext);
 
   const [api, saveApi] = useState({});
   const [recomendations, setRecomendations] = useState({});
   const [loading, setLoading] = useState(true);
-  const [done, setDone] = useState(false);
-  const [progress, setprogress] = useState(false);
-
-  const getLocal = () => {
-    const doneLocal = JSON.parse(localStorage.getItem('doneRecipes'));
-    const findDone = doneLocal.find((recipeId) => recipeId.id === id);
-    const doneProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    const findinProgress = doneProgress.cocktails[id];
-    if (findDone !== undefined) setDone(true);
-    if (findinProgress !== undefined) setprogress(true);
-  };
 
   useEffect(() => {
     (async () => {
@@ -29,7 +20,7 @@ function DrinkPage({ match: { params: { id } } }) {
       const resolveRec = await responseRec.json();
       setRecomendations(resolveRec);
       saveApi(resolve.drinks);
-      getLocal();
+      getLocal(id, 'cocktails');
       setLoading(false);
     })();
   }, []);

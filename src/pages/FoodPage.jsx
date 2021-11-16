@@ -1,34 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import DetailPage from '../components/DetailPage';
+import GlobalContext from '../context/GlobalContext';
 
 function FoodPage({ match: { params: { id } } }) {
   const history = useHistory();
+  const { getLocal, done, progress } = useContext(GlobalContext);
+
   const [api, saveApi] = useState({});
   const [recomendations, setRecomendations] = useState({});
   const [loading, setLoading] = useState(true);
-  const [done, setDone] = useState(false);
-  const [progress, setprogress] = useState(false);
-
-  const getLocal = () => {
-    const doneLocal = JSON.parse(localStorage.getItem('doneRecipes'));
-    const findDone = doneLocal.find((recipeId) => recipeId.id === id);
-    const doneProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    const findinProgress = doneProgress.meals[id];
-    if (findDone !== undefined) setDone(true);
-    if (findinProgress !== undefined) setprogress(true);
-  };
 
   useEffect(() => {
     (async () => {
       const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
       const resolve = await response.json();
       saveApi(resolve.meals);
-      getLocal();
+      getLocal(id, 'meals');
       setLoading(false);
     })();
-  }, [id]);
+  }, []);
 
   useEffect(() => {
     (async () => {
