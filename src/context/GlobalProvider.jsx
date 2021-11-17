@@ -1,38 +1,35 @@
-import React, { useReducer, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import P from 'prop-types';
 import GlobalContext from './GlobalContext';
-import { reducer, SAVE_RETURN } from '../reducer/reducer';
-
-const INITIAL_STATE = {
-  search: '',
-  option: '',
-  inputIsVisible: false,
-  pathName: '',
-  ingredientsList: [],
-  isLoading: true,
-  filters: [],
-};
 
 function GlobalProvider({ children }) {
-  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
-  const { option, search, pathName } = state;
   const [done, setDone] = useState(false);
   const [progress, setprogress] = useState(false);
   const [stateEmail, setStateEmail] = useState('guest');
+  const [drinks, setDrinks] = useState([]);
+  const [categoryMeals, setCategoryMeals] = useState([]);
+  const [categoryDrinks, setCategoryDrinks] = useState([]);
+  const [meals, setMeals] = useState([]);
+  const [filtredDrinks, setFiltredDrinks] = useState([]);
+  const [filtredMeals, setFiltredMeals] = useState([]);
 
   const fetchRecipes = async (param) => {
     const response = await fetch(`https://www.${param}.com/api/json/v1/1/search.php?s=`);
     const resFilters = await fetch(`https://www.${param}.com/api/json/v1/1/list.php?c=list`);
     const json = await response.json();
     const jsonFilters = await resFilters.json();
-    dispatch({
-      type: SAVE_RETURN,
-      payload: {
-        json,
-        isLoading: false,
-        jsonFilters,
-      },
-    });
+    if (param === 'themealdb') {
+      setMeals(json);
+      setCategoryMeals(jsonFilters);
+      setFiltredMeals(json);
+      setFiltredDrinks(json);
+    }
+    if (param === 'thecocktaildb') {
+      setDrinks(json);
+      setCategoryDrinks(jsonFilters);
+      setFiltredMeals(json);
+      setFiltredDrinks(json);
+    }
   };
 
   const getLocal = (id, type) => {
@@ -59,55 +56,24 @@ function GlobalProvider({ children }) {
     return ingredientandMeasures;
   };
 
-  useEffect(() => {
-    (async () => {
-      switch (option) {
-      case 'ingredient': {
-        const response = await fetch(`https://www.${pathName}.com/api/json/v1/1/filter.php?i=${search}`);
-        const json = await response.json();
-        console.log(json);
-        dispatch({
-          type: SAVE_RETURN,
-          payload: { json, isLoading: false },
-        });
-        break;
-      }
-      case 'name': {
-        const response = await fetch(`https://www.${pathName}.com/api/json/v1/1/search.php?s=${search}`);
-        const json = await response.json();
-        dispatch({
-          type: SAVE_RETURN,
-          payload: { json, isLoading: false },
-        });
-        break;
-      }
-      case 'initialLetter': {
-        const response = await fetch(`https://www.${pathName}.com/api/json/v1/1/search.php?f=${search}`);
-        const json = await response.json();
-        dispatch({
-          type: SAVE_RETURN,
-          payload: { json, isLoading: false },
-        });
-        break;
-      }
-      default:
-        break;
-      }
-    })();
-  }, [search, option, pathName]);
-
   return (
     <GlobalContext.Provider
       value={ {
-        state,
-        dispatch,
+        meals,
+        drinks,
+        categoryDrinks,
+        categoryMeals,
         fetchRecipes,
         getLocal,
         done,
         progress,
         nameandMeasures,
         stateEmail,
-        setStateEmail } }
+        setStateEmail,
+        setFiltredDrinks,
+        setFiltredMeals,
+        filtredDrinks,
+        filtredMeals } }
     >
       { children }
     </GlobalContext.Provider>

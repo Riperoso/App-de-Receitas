@@ -18,7 +18,7 @@ function DetailPageDrink({ api, nameandMeasure, recomendations, url }) {
         // Gary Vernon Grubb
         onClick={ () => {
           window.navigator.clipboard.writeText(`http://localhost:3000${url}`);
-          global.alert('Link Copiado');
+          global.alert('Link Copiado!');
         } }
       >
         <img src={ shareIcon } alt="Compartilhar" />

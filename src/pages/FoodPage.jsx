@@ -48,6 +48,8 @@ function FoodPage(props) {
     return ingredientandMeasures;
   };
 
+  console.log(api);
+
   const saveLocal = () => {
     const doneProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
     const localProgress = { ...doneProgress,
