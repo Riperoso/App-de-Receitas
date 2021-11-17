@@ -12,6 +12,8 @@ function GlobalProvider({ children }) {
   const [meals, setMeals] = useState([]);
   const [filtredDrinks, setFiltredDrinks] = useState([]);
   const [filtredMeals, setFiltredMeals] = useState([]);
+  const [filtredMealsByCategory, setFiltredMealsByCategory] = useState([]);
+  const [filtredDrinksByCategory, setFiltredDrinksByCategory] = useState([]);
   const [showBar, setShowBar] = useState(false);
 
   const fetchRecipes = async (param) => {
@@ -65,8 +67,7 @@ function GlobalProvider({ children }) {
     localStorage.setItem('favoriteRecipes', JSON.stringify([]));
     localStorage.setItem('inProgressRecipes', JSON.stringify({ cocktails: {},
       meals: {} }));
-  },
-  []);
+  }, []);
 
   return (
     <GlobalContext.Provider
@@ -89,7 +90,11 @@ function GlobalProvider({ children }) {
         setDrinks,
         setMeals,
         showBar,
-        setShowBar } }
+        setShowBar,
+        filtredMealsByCategory,
+        setFiltredMealsByCategory,
+        setFiltredDrinksByCategory,
+        filtredDrinksByCategory } }
     >
       { children }
     </GlobalContext.Provider>
