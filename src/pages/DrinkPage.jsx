@@ -1,41 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import DetailPageDrink from '../components/DetailPageDrink';
+import GlobalContext from '../context/GlobalContext';
 
-function DrinkPage({ match: { params: { id } } }) {
+function DrinkPage(props) {
+  const { match: { params: { id } } } = props;
+  const { match: { url } } = props;
+
   const history = useHistory();
+  const { getLocal, done, progress } = useContext(GlobalContext);
 
   const [api, saveApi] = useState({});
   const [recomendations, setRecomendations] = useState({});
   const [loading, setLoading] = useState(true);
-  const [done, setDone] = useState(false);
-  const [progress, setprogress] = useState(false);
-
-  const getLocal = () => {
-    const doneLocal = JSON.parse(localStorage.getItem('doneRecipes'));
-    const findDone = doneLocal.find((recipeId) => recipeId.id === id);
-    const doneProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    const findinProgress = doneProgress.cocktails[id];
-    if (findDone !== undefined) setDone(true);
-    if (findinProgress !== undefined) setprogress(true);
-  };
 
   useEffect(() => {
     (async () => {
       const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
       const resolve = await response.json();
+      const responseRec = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+      const resolveRec = await responseRec.json();
+      setRecomendations(resolveRec);
       saveApi(resolve.drinks);
-      getLocal();
-      setLoading(false);
-    })();
-  }, [id]);
-
-  useEffect(() => {
-    (async () => {
-      const response = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
-      const resolve = await response.json();
-      setRecomendations(resolve);
+      getLocal(id, 'cocktails');
       setLoading(false);
     })();
   }, []);
@@ -61,7 +49,7 @@ function DrinkPage({ match: { params: { id } } }) {
       cocktails:
        { ...doneProgress.cocktails, [id]: nameandMeasures() } };
     localStorage.setItem('inProgressRecipes', JSON.stringify(localProgress));
-    history.push(`/comidas/${id}/in-progress`);
+    history.push(`/bebidas/${id}/in-progress`);
   };
 
   if (loading) return <h1>loading</h1>;
@@ -72,6 +60,7 @@ function DrinkPage({ match: { params: { id } } }) {
         api={ api[0] }
         nameandMeasure={ nameandMeasures }
         recomendations={ recomendations }
+        url={ url }
       />
       <div>
         <button

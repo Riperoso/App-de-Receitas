@@ -1,53 +1,45 @@
 import React, { useContext, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import FilterMeal from '../components/FilterMeal';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import GlobalContext from '../context/GlobalContext';
 import RecipeCard from '../components/RecipeCard';
-import Filters from '../components/Filters';
 
-const MAX_NUMBER = 11;
+const MAX_NUMBER = 12;
 
 function FoodsPage() {
-  const { state, fetchRecipes } = useContext(GlobalContext);
-  const { isLoading, ingredientsList, filters } = state;
-  const history = useHistory();
+  const { fetchRecipes, stateEmail, meals, showBar } = useContext(GlobalContext);
 
   useEffect(() => {
     fetchRecipes('themealdb');
-  }, []);
-
-  const renderCards = (recipes) => (
-    recipes.map((recipe, id) => (
-      id <= MAX_NUMBER
-        ? <RecipeCard key={ id } id={ id } recipe={ recipe } />
-        : null
-    ))
-  );
-
-  const renderFood = (recipes) => {
-    if (recipes.meals !== null) {
-      return recipes.meals.length === 1
-        ? history.push(`/comidas/${recipes.meals[0].idMeal}`)
-        : renderCards(recipes.meals);
+    if (stateEmail === undefined || stateEmail.length === 0 || stateEmail === null) {
+      localStorage.setItem('user', JSON.stringify({ email: 'guest@email.com' }));
+    } else {
+      localStorage.setItem('user', JSON.stringify({ email: stateEmail }));
     }
-    global.alert('Sinto muito, não encontramos nenhuma receita para esses filtros.');
-  };
-
-  const renderFoodsAndFilters = (rec, filt) => (
-    <>
-      <Filters filters={ filt } param="meals" />
-      {renderFood(rec)}
-    </>
-  );
+    localStorage.setItem('doneRecipes', JSON.stringify([]));
+    localStorage.setItem('favoriteRecipes', JSON.stringify([]));
+    localStorage.setItem('inProgressRecipes', JSON.stringify({ cocktails: {},
+      meals: {} }));
+  }, []);
 
   return (
     <>
       <Header title="Comidas" />
-      <SearchBar />
+      <FilterMeal />
+      {showBar && <SearchBar />}
       {
-        !isLoading && renderFoodsAndFilters(ingredientsList, filters)
+        meals.meals && meals.meals.map((meal, index) => index < MAX_NUMBER && (
+          <Link to={ `/comidas/${meal.idMeal}` }>
+            <RecipeCard
+              key={ meal.idMeal }
+              str={ meal.strMeal }
+              src={ meal.strMealThumb }
+              id={ index }
+            />
+          </Link>))
       }
       <Footer />
     </>
