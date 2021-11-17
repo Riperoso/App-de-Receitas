@@ -16,6 +16,10 @@ function FoodsPage() {
 
   useEffect(() => {
     fetchRecipes('themealdb');
+    localStorage.setItem('doneRecipes', JSON.stringify([]));
+    localStorage.setItem('favoriteRecipes', JSON.stringify([]));
+    localStorage.setItem('inProgressRecipes', JSON.stringify({ cocktails: {},
+      meals: {} }));
   }, []);
 
   const renderCards = (recipes) => (
