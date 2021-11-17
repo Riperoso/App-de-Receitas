@@ -33,7 +33,7 @@ function GlobalProvider({ children }) {
 
   const getLocal = (id, type) => {
     const doneLocal = JSON.parse(localStorage.getItem('doneRecipes'));
-    const findDone = doneLocal.find((recipeId) => recipeId.id === id);
+    const findDone = doneLocal.find((recipeId) => recipeId[id] === id);
     const doneProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
     const findinProgress = doneProgress[type][id];
     if (findDone !== undefined) setDone(true);

@@ -6,7 +6,7 @@ import RecomendationsCard from './RecomendationsCard';
 
 function DetailPageDrink({ api, nameandMeasure, recomendations, url }) {
   const MAX_RECOMENDATIONS = 6;
-  console.log(api);
+
   return (
     <>
       <img data-testid="recipe-photo" src={ api.strDrinkThumb } alt={ api.Drink } />
