@@ -4,7 +4,9 @@ import { useHistory } from 'react-router-dom';
 import DetailPage from '../components/DetailPage';
 import GlobalContext from '../context/GlobalContext';
 
-function FoodPage({ match: { params: { id } } }) {
+function FoodPage(props) {
+  const { match: { params: { id } } } = props;
+  const { match: { url } } = props;
   const history = useHistory();
   const { getLocal, done, progress } = useContext(GlobalContext);
 
@@ -63,6 +65,7 @@ function FoodPage({ match: { params: { id } } }) {
         api={ api[0] }
         nameandMeasure={ nameandMeasures }
         recomendations={ recomendations }
+        url={ url }
       />
       <div>
         <button

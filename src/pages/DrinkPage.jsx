@@ -4,7 +4,10 @@ import { useHistory } from 'react-router-dom';
 import DetailPageDrink from '../components/DetailPageDrink';
 import GlobalContext from '../context/GlobalContext';
 
-function DrinkPage({ match: { params: { id } } }) {
+function DrinkPage(props) {
+  const { match: { params: { id } } } = props;
+  const { match: { url } } = props;
+
   const history = useHistory();
   const { getLocal, done, progress } = useContext(GlobalContext);
 
@@ -46,7 +49,7 @@ function DrinkPage({ match: { params: { id } } }) {
       cocktails:
        { ...doneProgress.cocktails, [id]: nameandMeasures() } };
     localStorage.setItem('inProgressRecipes', JSON.stringify(localProgress));
-    history.push(`/comidas/${id}/in-progress`);
+    history.push(`/bebidas/${id}/in-progress`);
   };
 
   if (loading) return <h1>loading</h1>;
@@ -57,6 +60,7 @@ function DrinkPage({ match: { params: { id } } }) {
         api={ api[0] }
         nameandMeasure={ nameandMeasures }
         recomendations={ recomendations }
+        url={ url }
       />
       <div>
         <button

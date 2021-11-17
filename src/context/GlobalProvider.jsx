@@ -18,6 +18,7 @@ function GlobalProvider({ children }) {
   const { option, search, pathName } = state;
   const [done, setDone] = useState(false);
   const [progress, setprogress] = useState(false);
+  const [stateEmail, setStateEmail] = useState('guest');
 
   const fetchRecipes = async (param) => {
     const response = await fetch(`https://www.${param}.com/api/json/v1/1/search.php?s=`);
@@ -41,6 +42,21 @@ function GlobalProvider({ children }) {
     const findinProgress = doneProgress[type][id];
     if (findDone !== undefined) setDone(true);
     if (findinProgress !== undefined) setprogress(true);
+  };
+
+  const nameandMeasures = (api) => {
+    const ingredientandMeasures = [];
+    const NUMBER_TWEENTY = 20;
+    if (api !== undefined) {
+      for (let index = 1; index < NUMBER_TWEENTY; index += 1) {
+        const str = `strIngredient${index}`;
+        const measure = `strMeasure${index}`;
+        if (api[0][str] !== undefined && api[0][str] !== null) {
+          ingredientandMeasures.push(`${api[0][str]} - ${api[0][measure]}`);
+        }
+      }
+    }
+    return ingredientandMeasures;
   };
 
   useEffect(() => {
@@ -82,7 +98,16 @@ function GlobalProvider({ children }) {
 
   return (
     <GlobalContext.Provider
-      value={ { state, dispatch, fetchRecipes, getLocal, done, progress } }
+      value={ {
+        state,
+        dispatch,
+        fetchRecipes,
+        getLocal,
+        done,
+        progress,
+        nameandMeasures,
+        stateEmail,
+        setStateEmail } }
     >
       { children }
     </GlobalContext.Provider>

@@ -10,12 +10,13 @@ import Filters from '../components/Filters';
 const MAX_NUMBER = 11;
 
 function FoodsPage() {
-  const { state, fetchRecipes } = useContext(GlobalContext);
+  const { state, fetchRecipes, stateEmail } = useContext(GlobalContext);
   const { isLoading, ingredientsList, filters } = state;
   const history = useHistory();
 
   useEffect(() => {
     fetchRecipes('themealdb');
+    localStorage.setItem('user', JSON.stringify({ email: stateEmail }));
     localStorage.setItem('doneRecipes', JSON.stringify([]));
     localStorage.setItem('favoriteRecipes', JSON.stringify([]));
     localStorage.setItem('inProgressRecipes', JSON.stringify({ cocktails: {},

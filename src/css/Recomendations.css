@@ -1,0 +1,12 @@
+.carousel-div {
+  display: flex;
+  overflow-x: scroll;
+}
+
+.recommendation-carousel {
+  width: 100%;
+}
+
+.recommendation-carousel img {
+  width: 50vw;
+}

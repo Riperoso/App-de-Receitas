@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import GlobalContext from '../context/GlobalContext';
 
 function Login() {
+  const { setStateEmail } = useContext(GlobalContext);
   const [email, saveEmail] = useState('');
   const [password, savePassword] = useState('');
   const [disable, setDisable] = useState(true);
@@ -16,7 +18,7 @@ function Login() {
   const handleclick = () => {
     localStorage.setItem('mealsToken', '1');
     localStorage.setItem('cocktailsToken', '1');
-    localStorage.setItem('user', JSON.stringify({ email }));
+    setStateEmail(email);
     history.push('/comidas');
   };
 

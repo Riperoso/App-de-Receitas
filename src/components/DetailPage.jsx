@@ -4,27 +4,37 @@ import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import RecomendationsCard from './RecomendationsCard';
 
-function DetailPage({ api, nameandMeasure, recomendations }) {
+function DetailPage({ api, nameandMeasure, recomendations, url }) {
   const MAX_RECOMENDATIONS = 6;
   return (
     <>
       <img data-testid="recipe-photo" src={ api.strMealThumb } alt={ api.Meal } />
       <h2 data-testid="recipe-title">{api.strMeal}</h2>
-      <button type="button" data-testid="share-btn">
-        <img src={ shareIcon } alt="botão de compartilhar" />
+      <button
+        type="button"
+        data-testid="share-btn"
+        // https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
+        // Gary Vernon Grubb
+        onClick={ () => {
+          window.navigator.clipboard.writeText(`http://localhost:3000${url}`);
+          global.alert('Link Copiado');
+        } }
+      >
+        <img src={ shareIcon } alt="Compartilhar" />
       </button>
       <button type="button" data-testid="favorite-btn">
         <img src={ whiteHeartIcon } alt="botão de favoritar" />
       </button>
       <h4 data-testid="recipe-category">{api.strCategory}</h4>
       <ul>
-        {nameandMeasure().map((ingredient, index) => (
-          <li
-            data-testid={ `${index}-ingredient-name-and-measure` }
-            key={ ingredient }
-          >
-            {ingredient}
-          </li>))}
+        {nameandMeasure()
+          .map((ingredient, index) => (
+            <li
+              data-testid={ `${index}-ingredient-name-and-measure` }
+              key={ ingredient }
+            >
+              {ingredient}
+            </li>))}
       </ul>
       <p data-testid="instructions">{api.strInstructions}</p>
       <div className="video-responsive">
@@ -40,7 +50,7 @@ function DetailPage({ api, nameandMeasure, recomendations }) {
           title="Embedded youtube"
         />
       </div>
-      <div>
+      <div className="carousel-div">
         {recomendations.drinks && recomendations.drinks.map((recomendation, index) => (
           index < MAX_RECOMENDATIONS
         && (<RecomendationsCard
@@ -59,6 +69,7 @@ DetailPage.propTypes = {
   api: PropTypes.objectOf(PropTypes.string).isRequired,
   nameandMeasure: PropTypes.objectOf(PropTypes.string).isRequired,
   recomendations: PropTypes.objectOf(PropTypes.string).isRequired,
+  url: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 export default DetailPage;
