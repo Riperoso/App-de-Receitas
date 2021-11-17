@@ -73,7 +73,8 @@ function GlobalProvider({ children }) {
         setFiltredDrinks,
         setFiltredMeals,
         filtredDrinks,
-        filtredMeals } }
+        filtredMeals,
+        setDrinks } }
     >
       { children }
     </GlobalContext.Provider>

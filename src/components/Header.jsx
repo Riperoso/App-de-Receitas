@@ -1,13 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import P from 'prop-types';
 import { Link } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
-import GlobalContext from '../context/GlobalContext';
 
 function Header({ title = '', hasBtn = true }) {
-  const context = useContext(GlobalContext);
-
   return (
     <header>
       <h1 data-testid="page-title">{ title }</h1>

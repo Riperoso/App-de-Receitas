@@ -11,20 +11,33 @@ function SearchBar() {
   const { location: { pathname } } = history;
 
   const requestSwitch = async (path, opt, src) => {
-    const pathName = path === '/comidas' ? 'themealdb' : 'thecocktaildb';
-    const type = path === '/comidas' ? 'meals' : 'drinks';
-    const id = path === '/comidas' ? 'idMeal' : 'idDrink';
+    let pathName;
+    let type;
+    let id;
+    if (path === '/comidas') {
+      pathName = 'themealdb';
+      type = 'meals';
+      id = path === 'idMeal';
+    } if (path === '/bebidas') {
+      pathName = 'thecocktaildb';
+      type = 'drinks';
+      id = 'idDrink';
+    }
     switch (opt) {
     case 'ingredient': {
       const response = await fetch(`https://www.${pathName}.com/api/json/v1/1/filter.php?i=${src}`);
       const json = await response.json();
       if (json[type].length === 1) { history.push(`${path}/${json[type][0][id]}`); }
+      if (path === '/comidas') { setMeals(json); }
+      if (path === '/bebidas') { setDrinks(json); }
       break;
     }
     case 'name': {
       const response = await fetch(`https://www.${pathName}.com/api/json/v1/1/search.php?s=${src}`);
       const json = await response.json();
       if (json[type].length === 1) { history.push(`${path}/${json[type][0][id]}`); }
+      if (path === '/comidas') { setMeals(json); }
+      if (path === '/bebidas') { setDrinks(json); }
       break;
     }
     case 'initialLetter': {
@@ -32,7 +45,8 @@ function SearchBar() {
       const response = await fetch(`https://www.${pathName}.com/api/json/v1/1/search.php?f=${src}`);
       const json = await response.json();
       if (json[type].length === 1) { history.push(`${path}/${json[type][0][id]}`); }
-
+      if (path === '/comidas') { setMeals(json); }
+      if (path === '/bebidas') { setDrinks(json); }
       break;
     }
     default:

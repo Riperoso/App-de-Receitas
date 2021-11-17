@@ -1,21 +1,24 @@
 import React, { useContext, useEffect } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import FilterMeal from '../components/FilterMeal';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import GlobalContext from '../context/GlobalContext';
 import RecipeCard from '../components/RecipeCard';
-import Filters from '../components/Filters';
 
-const MAX_NUMBER = 11;
+const MAX_NUMBER = 12;
 
 function FoodsPage() {
   const { fetchRecipes, stateEmail, meals } = useContext(GlobalContext);
-  const history = useHistory();
 
   useEffect(() => {
     fetchRecipes('themealdb');
-    localStorage.setItem('user', JSON.stringify({ email: stateEmail }));
+    if (stateEmail === undefined || stateEmail.length === 0 || stateEmail === null) {
+      localStorage.setItem('user', JSON.stringify({ email: 'guest@email.com' }));
+    } else {
+      localStorage.setItem('user', JSON.stringify({ email: stateEmail }));
+    }
     localStorage.setItem('doneRecipes', JSON.stringify([]));
     localStorage.setItem('favoriteRecipes', JSON.stringify([]));
     localStorage.setItem('inProgressRecipes', JSON.stringify({ cocktails: {},
@@ -25,6 +28,7 @@ function FoodsPage() {
   return (
     <>
       <Header title="Comidas" />
+      <FilterMeal />
       <SearchBar />
       {
         meals.meals && meals.meals.map((meal, index) => index < MAX_NUMBER && (

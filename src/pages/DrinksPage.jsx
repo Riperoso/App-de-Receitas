@@ -1,18 +1,16 @@
 import React, { useContext, useEffect } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import GlobalContext from '../context/GlobalContext';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
-import DrinkCard from '../components/DrinkCard';
-import Filters from '../components/Filters';
 import RecipeCard from '../components/RecipeCard';
+import FilterDrink from '../components/FilterDrink';
 
 const MAX_NUMBER = 11;
 
 function DrinksPage() {
   const { fetchRecipes, drinks } = useContext(GlobalContext);
-  const history = useHistory();
 
   useEffect(() => {
     fetchRecipes('thecocktaildb');
@@ -21,6 +19,7 @@ function DrinksPage() {
   return (
     <div>
       <Header title="Bebidas" />
+      <FilterDrink />
       <SearchBar />
       {
         drinks.drinks && drinks.drinks.map((drink, index) => index < MAX_NUMBER && (
