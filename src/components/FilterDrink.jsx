@@ -1,14 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import GlobalContext from '../context/GlobalContext';
 
 function FilterDrink() {
-  const { categoryDrinks, setDrinks } = useContext(GlobalContext);
+  const { setDrinks, categoryDrinks, fetchRecipes } = useContext(GlobalContext);
+  const [saveCate, setSaveCate] = useState();
   const MAX_MAP = 5;
 
   const handleClick = async (category) => {
-    const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`);
-    const json = await response.json();
-    setDrinks(json);
+    if (saveCate === category) {
+      fetchRecipes('thecocktaildb');
+      setSaveCate('');
+    } else {
+      const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`);
+      const json = await response.json();
+      setDrinks(json);
+      setSaveCate(category);
+    }
   };
 
   return (
