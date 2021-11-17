@@ -8,7 +8,11 @@ function FilterDrink() {
     <div>
       {categoryDrinks.drinks && categoryDrinks.drinks
         .map((category, index) => (index < MAX_MAP && (
-          <button type="button" key={ index }>
+          <button
+            type="button"
+            key={ index }
+            data-testid={ `${category.strCategory}-category-filter` }
+          >
             {category.strCategory}
           </button>
         )))}
