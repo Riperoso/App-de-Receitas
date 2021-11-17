@@ -12,7 +12,7 @@ function Perfil() {
   };
 
   useEffect(() => {
-    if (localStorage.user === undefined) {
+    if (!localStorage.user) {
       localStorage.setItem('user', JSON.stringify({ email: 'guest@email.com' }));
     }
   }, []);

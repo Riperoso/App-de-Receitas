@@ -10,7 +10,7 @@ import RecipeCard from '../components/RecipeCard';
 const MAX_NUMBER = 12;
 
 function FoodsPage() {
-  const { fetchRecipes, stateEmail, meals } = useContext(GlobalContext);
+  const { fetchRecipes, stateEmail, meals, showBar } = useContext(GlobalContext);
 
   useEffect(() => {
     fetchRecipes('themealdb');
@@ -29,7 +29,7 @@ function FoodsPage() {
     <>
       <Header title="Comidas" />
       <FilterMeal />
-      <SearchBar />
+      {showBar && <SearchBar />}
       {
         meals.meals && meals.meals.map((meal, index) => index < MAX_NUMBER && (
           <Link to={ `/comidas/${meal.idMeal}` }>

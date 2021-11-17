@@ -12,6 +12,7 @@ function GlobalProvider({ children }) {
   const [meals, setMeals] = useState([]);
   const [filtredDrinks, setFiltredDrinks] = useState([]);
   const [filtredMeals, setFiltredMeals] = useState([]);
+  const [showBar, setShowBar] = useState(false);
 
   const fetchRecipes = async (param) => {
     const response = await fetch(`https://www.${param}.com/api/json/v1/1/search.php?s=`);
@@ -22,12 +23,10 @@ function GlobalProvider({ children }) {
       setMeals(json);
       setCategoryMeals(jsonFilters);
       setFiltredMeals(json);
-      setFiltredDrinks(json);
     }
     if (param === 'thecocktaildb') {
       setDrinks(json);
       setCategoryDrinks(jsonFilters);
-      setFiltredMeals(json);
       setFiltredDrinks(json);
     }
   };
@@ -74,7 +73,10 @@ function GlobalProvider({ children }) {
         setFiltredMeals,
         filtredDrinks,
         filtredMeals,
-        setDrinks } }
+        setDrinks,
+        setMeals,
+        showBar,
+        setShowBar } }
     >
       { children }
     </GlobalContext.Provider>

@@ -25,8 +25,6 @@ function SearchBar() {
       const response = await fetch(`https://www.${pathName}.com/api/json/v1/1/filter.php?i=${src}`);
       const json = await response.json();
       trow(json, type, path, id);
-      if (path === '/comidas' && json[type].length > 1) { setMeals(json); }
-      if (path === '/bebidas' && json[type].length > 1) { setDrinks(json); }
       break;
     }
     case 'name': {
