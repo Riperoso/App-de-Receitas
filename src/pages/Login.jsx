@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import GlobalContext from '../context/GlobalContext';
 
 function Login() {
-  const { setStateEmail } = useContext(GlobalContext);
   const [email, saveEmail] = useState('');
   const [password, savePassword] = useState('');
   const [disable, setDisable] = useState(true);
