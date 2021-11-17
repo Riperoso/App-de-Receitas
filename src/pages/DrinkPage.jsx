@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import DetailPageDrink from '../components/DetailPageDrink';
 import GlobalContext from '../context/GlobalContext';
+import '../css/Recomendations.css';
 
 function DrinkPage(props) {
   const { match: { params: { id } } } = props;
   const { match: { url } } = props;
 
   const history = useHistory();
-  const { getLocal, done, progress } = useContext(GlobalContext);
+  const { getLocal, progress } = useContext(GlobalContext);
 
   const [api, saveApi] = useState({});
   const [recomendations, setRecomendations] = useState({});
@@ -19,11 +20,17 @@ function DrinkPage(props) {
     (async () => {
       const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
       const resolve = await response.json();
+      saveApi(resolve.drinks);
+      getLocal(id, 'cocktails');
+      setLoading(false);
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
       const responseRec = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
       const resolveRec = await responseRec.json();
       setRecomendations(resolveRec);
-      saveApi(resolve.drinks);
-      getLocal(id, 'cocktails');
       setLoading(false);
     })();
   }, []);
@@ -45,10 +52,12 @@ function DrinkPage(props) {
 
   const saveLocal = () => {
     const doneProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    const localProgress = { ...doneProgress,
-      cocktails:
-       { ...doneProgress.cocktails, [id]: nameandMeasures() } };
-    localStorage.setItem('inProgressRecipes', JSON.stringify(localProgress));
+    if (doneProgress !== null) {
+      const localProgress = { ...doneProgress,
+        cocktails:
+         { ...doneProgress.cocktails, [id]: [] } };
+      localStorage.setItem('inProgressRecipes', JSON.stringify(localProgress));
+    }
     history.push(`/bebidas/${id}/in-progress`);
   };
 
@@ -62,16 +71,14 @@ function DrinkPage(props) {
         recomendations={ recomendations }
         url={ url }
       />
-      <div>
-        <button
-          data-testid="start-recipe-btn"
-          className={ done && 'removeButton' }
-          onClick={ () => saveLocal() }
-          type="button"
-        >
-          { progress ? 'Continuar receita' : 'Iniciar Receita' }
-        </button>
-      </div>
+      <button
+        data-testid="start-recipe-btn"
+        className="botton-recipe"
+        onClick={ () => saveLocal() }
+        type="button"
+      >
+        { progress ? 'Continuar Receita' : 'Iniciar Receita' }
+      </button>
     </>
   );
 }

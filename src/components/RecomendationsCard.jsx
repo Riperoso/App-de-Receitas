@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import '../css/Recomendations.css';
 
 const RecomendationsCard = ({ img, title, index }) => (
-  <div className="recommendation-carousel" data-testid={ `${index}-recomendation-card` }>
+  <div className="recomendationCard" data-testid={ `${index}-recomendation-card` }>
     <img src={ img } alt={ title } />
     <p data-testid={ `${index}-recomendation-title` }>
       { title }

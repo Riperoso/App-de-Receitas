@@ -2,3 +2,16 @@
   display: flex;
   overflow-x: scroll;
 }
+
+.recomendationCard {
+  width: 100%;
+}
+
+.recomendationCard img {
+  width: 50vw;
+}
+
+.botton-recipe {
+  bottom: 0;
+  position: fixed;
+}

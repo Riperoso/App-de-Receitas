@@ -18,7 +18,15 @@ function Login() {
   const handleclick = () => {
     localStorage.setItem('mealsToken', '1');
     localStorage.setItem('cocktailsToken', '1');
-    setStateEmail(email);
+    if (email === undefined || email.length === 0 || email === null) {
+      localStorage.setItem('user', JSON.stringify({ email: 'guest@email.com' }));
+    } else {
+      localStorage.setItem('user', JSON.stringify({ email }));
+    }
+    localStorage.setItem('doneRecipes', JSON.stringify([]));
+    localStorage.setItem('favoriteRecipes', JSON.stringify([]));
+    localStorage.setItem('inProgressRecipes', JSON.stringify({ cocktails: {},
+      meals: {} }));
     history.push('/comidas');
   };
 

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import RecomendationsCard from './RecomendationsCard';
 
 function DetailPage({ api, nameandMeasure, recomendations, url }) {
+  const [message, setMessage] = useState(false);
   const MAX_RECOMENDATIONS = 6;
   return (
     <>
@@ -17,10 +18,11 @@ function DetailPage({ api, nameandMeasure, recomendations, url }) {
         // Gary Vernon Grubb
         onClick={ () => {
           window.navigator.clipboard.writeText(`http://localhost:3000${url}`);
-          global.alert('Link Copiado!');
+          setMessage(true);
         } }
       >
         <img src={ shareIcon } alt="Compartilhar" />
+        { message && <p>Link copiado!</p> }
       </button>
       <button type="button" data-testid="favorite-btn">
         <img src={ whiteHeartIcon } alt="botão de favoritar" />

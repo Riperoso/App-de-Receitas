@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import DetailPage from '../components/DetailPage';
 import GlobalContext from '../context/GlobalContext';
+import '../css/Recomendations.css';
 
 function FoodPage(props) {
   const { match: { params: { id } } } = props;
   const { match: { url } } = props;
   const history = useHistory();
-  const { getLocal, done, progress } = useContext(GlobalContext);
+  const { getLocal, progress } = useContext(GlobalContext);
 
   const [api, saveApi] = useState({});
   const [recomendations, setRecomendations] = useState({});
@@ -19,17 +20,17 @@ function FoodPage(props) {
       const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
       const resolve = await response.json();
       saveApi(resolve.meals);
-      getLocal(id, 'meals');
       setLoading(false);
+      console.log('dentro', progress);
     })();
   }, []);
 
   useEffect(() => {
     (async () => {
+      getLocal(id, 'meals');
       const response = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
       const resolve = await response.json();
       setRecomendations(resolve);
-      setLoading(false);
     })();
   }, []);
 
@@ -52,13 +53,16 @@ function FoodPage(props) {
 
   const saveLocal = () => {
     const doneProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    const localProgress = { ...doneProgress,
-      meals:
-       { ...doneProgress.meals, [id]: nameandMeasures() } };
-    localStorage.setItem('inProgressRecipes', JSON.stringify(localProgress));
+    if (doneProgress !== null) {
+      const localProgress = { ...doneProgress,
+        meals:
+         { ...doneProgress.meals, [id]: [] } };
+      localStorage.setItem('inProgressRecipes', JSON.stringify(localProgress));
+    }
     history.push(`/comidas/${id}/in-progress`);
   };
 
+  console.log('fora', progress);
   if (loading) return <h1>loading</h1>;
 
   return (
@@ -72,11 +76,11 @@ function FoodPage(props) {
       <div>
         <button
           data-testid="start-recipe-btn"
-          className={ done && 'removeButton' }
+          className="botton-recipe"
           onClick={ () => saveLocal() }
           type="button"
         >
-          { progress ? 'Continuar receita' : 'Iniciar Receita' }
+          { progress ? 'Continuar Receita' : 'Iniciar Receita' }
         </button>
       </div>
     </>

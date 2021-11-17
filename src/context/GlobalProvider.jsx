@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import P from 'prop-types';
 import GlobalContext from './GlobalContext';
 
@@ -32,12 +32,19 @@ function GlobalProvider({ children }) {
   };
 
   const getLocal = (id, type) => {
+    setDone(false);
+    setprogress(false);
     const doneLocal = JSON.parse(localStorage.getItem('doneRecipes'));
-    const findDone = doneLocal.find((recipeId) => recipeId[id] === id);
     const doneProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    const findinProgress = doneProgress[type][id];
-    if (findDone !== undefined) setDone(true);
-    if (findinProgress !== undefined) setprogress(true);
+    if (doneLocal !== null) {
+      const findDone = doneLocal !== null
+      && doneLocal.find((recipeId) => recipeId[id] === id);
+      if (findDone !== undefined) { setDone(true); }
+    }
+    if (doneProgress !== null) {
+      const findinProgress = doneProgress !== null ? doneProgress[type][id] : null;
+      if (findinProgress !== undefined) setprogress(true);
+    }
   };
 
   const nameandMeasures = (api) => {
@@ -54,19 +61,6 @@ function GlobalProvider({ children }) {
     }
     return ingredientandMeasures;
   };
-
-  useEffect(() => {
-    if (stateEmail === undefined || stateEmail.length === 0 || stateEmail === null) {
-      localStorage.setItem('user', JSON.stringify({ email: 'guest@email.com' }));
-    } else {
-      localStorage.setItem('user', JSON.stringify({ email: stateEmail }));
-    }
-    localStorage.setItem('doneRecipes', JSON.stringify([]));
-    localStorage.setItem('favoriteRecipes', JSON.stringify([]));
-    localStorage.setItem('inProgressRecipes', JSON.stringify({ cocktails: {},
-      meals: {} }));
-  },
-  []);
 
   return (
     <GlobalContext.Provider
