@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import GlobalContext from '../context/GlobalContext';
 
 function FilterDrink() {
-  const { categoryDrinks, filteredDrink } = useContext(GlobalContext);
+  const { categoryDrinks } = useContext(GlobalContext);
   const MAX_MAP = 5;
   return (
     <div>

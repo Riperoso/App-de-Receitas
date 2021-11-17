@@ -7,7 +7,7 @@ import SearchBar from '../components/SearchBar';
 import RecipeCard from '../components/RecipeCard';
 import FilterDrink from '../components/FilterDrink';
 
-const MAX_NUMBER = 11;
+const MAX_NUMBER = 12;
 
 function DrinksPage() {
   const { fetchRecipes, drinks } = useContext(GlobalContext);

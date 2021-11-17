@@ -10,43 +10,36 @@ function SearchBar() {
 
   const { location: { pathname } } = history;
 
+  const trow = (json, type, path, id) => {
+    if (json[type].length === 1) { history.push(`${path}/${json[type][0][id]}`); }
+    if (path === '/comidas' && json[type].length > 1) { setMeals(json); }
+    if (path === '/bebidas' && json[type].length > 1) { setDrinks(json); }
+  };
+
   const requestSwitch = async (path, opt, src) => {
-    let pathName;
-    let type;
-    let id;
-    if (path === '/comidas') {
-      pathName = 'themealdb';
-      type = 'meals';
-      id = path === 'idMeal';
-    } if (path === '/bebidas') {
-      pathName = 'thecocktaildb';
-      type = 'drinks';
-      id = 'idDrink';
-    }
+    const pathName = path === '/comidas' ? 'themealdb' : 'thecocktaildb';
+    const type = path === '/comidas' ? 'meals' : 'drinks';
+    const id = path === '/comidas' ? 'idMeal' : 'idDrink';
     switch (opt) {
     case 'ingredient': {
       const response = await fetch(`https://www.${pathName}.com/api/json/v1/1/filter.php?i=${src}`);
       const json = await response.json();
-      if (json[type].length === 1) { history.push(`${path}/${json[type][0][id]}`); }
-      if (path === '/comidas') { setMeals(json); }
-      if (path === '/bebidas') { setDrinks(json); }
+      trow(json, type, path, id);
+      if (path === '/comidas' && json[type].length > 1) { setMeals(json); }
+      if (path === '/bebidas' && json[type].length > 1) { setDrinks(json); }
       break;
     }
     case 'name': {
       const response = await fetch(`https://www.${pathName}.com/api/json/v1/1/search.php?s=${src}`);
       const json = await response.json();
-      if (json[type].length === 1) { history.push(`${path}/${json[type][0][id]}`); }
-      if (path === '/comidas') { setMeals(json); }
-      if (path === '/bebidas') { setDrinks(json); }
+      trow(json, type, path, id);
       break;
     }
     case 'initialLetter': {
       if (src.length > 1) global.alert('Sua busca deve conter somente 1 (um) caracter');
       const response = await fetch(`https://www.${pathName}.com/api/json/v1/1/search.php?f=${src}`);
       const json = await response.json();
-      if (json[type].length === 1) { history.push(`${path}/${json[type][0][id]}`); }
-      if (path === '/comidas') { setMeals(json); }
-      if (path === '/bebidas') { setDrinks(json); }
+      trow(json, type, path, id);
       break;
     }
     default:
