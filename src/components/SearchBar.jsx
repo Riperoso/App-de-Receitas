@@ -11,6 +11,12 @@ function SearchBar() {
   const { location: { pathname } } = history;
 
   const trow = (json, type, path, id) => {
+    console.log(json);
+    if (json[type] === null) {
+      return global.alert(
+        'Sinto muito, não encontramos nenhuma receita para esses filtros.',
+      );
+    }
     if (json[type].length === 1) { history.push(`${path}/${json[type][0][id]}`); }
     if (path === '/comidas' && json[type].length > 1) { setMeals(json); }
     if (path === '/bebidas' && json[type].length > 1) { setDrinks(json); }
