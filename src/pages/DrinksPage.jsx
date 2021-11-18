@@ -20,26 +20,22 @@ function DrinksPage() {
     fetchRecipes('thecocktaildb');
   }, []);
 
-  const renderDrinks = () => (
-    drinks.drinks && drinks.drinks
-      .map((drink, index) => index < MAX_NUMBER && (
-        <Link to={ `/bebidas/${drink.idDrink}` }>
-          <RecipeCard
-            key={ drink.idDrink }
-            str={ drink.strDrink }
-            src={ drink.strDrinkThumb }
-            id={ index }
-          />
-        </Link>))
-  );
-
   return (
     <div>
       <Header title="Bebidas" />
       <FilterDrink />
       {showBar && <SearchBar />}
       {
-        renderDrinks()
+        drinks.drinks && drinks.drinks
+          .map((drink, index) => index < MAX_NUMBER && (
+            <Link to={ `/bebidas/${drink.idDrink}` }>
+              <RecipeCard
+                key={ drink.idDrink }
+                str={ drink.strDrink }
+                src={ drink.strDrinkThumb }
+                id={ index }
+              />
+            </Link>))
       }
       <Footer />
     </div>
