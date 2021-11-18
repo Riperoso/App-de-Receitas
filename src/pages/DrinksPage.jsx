@@ -10,7 +10,11 @@ import FilterDrink from '../components/FilterDrink';
 const MAX_NUMBER = 12;
 
 function DrinksPage() {
-  const { fetchRecipes, drinks, showBar } = useContext(GlobalContext);
+  const {
+    fetchRecipes,
+    drinks,
+    showBar,
+  } = useContext(GlobalContext);
 
   useEffect(() => {
     fetchRecipes('thecocktaildb');
@@ -22,15 +26,16 @@ function DrinksPage() {
       <FilterDrink />
       {showBar && <SearchBar />}
       {
-        drinks.drinks && drinks.drinks.map((drink, index) => index < MAX_NUMBER && (
-          <Link to={ `/bebidas/${drink.idDrink}` }>
-            <RecipeCard
-              key={ drink.idDrink }
-              str={ drink.strDrink }
-              src={ drink.strDrinkThumb }
-              id={ index }
-            />
-          </Link>))
+        drinks.drinks && drinks.drinks
+          .map((drink, index) => index < MAX_NUMBER && (
+            <Link to={ `/bebidas/${drink.idDrink}` }>
+              <RecipeCard
+                key={ drink.idDrink }
+                str={ drink.strDrink }
+                src={ drink.strDrinkThumb }
+                id={ index }
+              />
+            </Link>))
       }
       <Footer />
     </div>
