@@ -67,7 +67,7 @@ function FoodPage(props) {
         recomendations={ recomendations }
         url={ url }
       />
-      { !done ? (
+      <div className={ done ? 'hidden' : 'visible' }>
         <button
           data-testid="start-recipe-btn"
           className="botton-recipe"
@@ -75,7 +75,8 @@ function FoodPage(props) {
           type="button"
         >
           { progress ? 'Continuar Receita' : 'Iniciar Receita' }
-        </button>) : null }
+        </button>
+      </div>
     </>
   );
 }
