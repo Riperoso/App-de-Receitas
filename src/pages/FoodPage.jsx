@@ -9,7 +9,7 @@ function FoodPage(props) {
   const { match: { params: { id } } } = props;
   const { match: { url } } = props;
   const history = useHistory();
-  const { getLocal, progress } = useContext(GlobalContext);
+  const { getLocal, progress, done } = useContext(GlobalContext);
 
   const [api, saveApi] = useState({});
   const [recomendations, setRecomendations] = useState({});
@@ -21,7 +21,6 @@ function FoodPage(props) {
       const resolve = await response.json();
       saveApi(resolve.meals);
       setLoading(false);
-      console.log('dentro', progress);
     })();
   }, []);
 
@@ -37,19 +36,15 @@ function FoodPage(props) {
   const nameandMeasures = () => {
     const ingredientandMeasures = [];
     const NUMBER_TWEENTY = 20;
-    if (api !== undefined) {
-      for (let index = 1; index < NUMBER_TWEENTY; index += 1) {
-        const str = `strIngredient${index}`;
-        const measure = `strMeasure${index}`;
-        if (api[0][str] !== '' && api[0][str] !== null) {
-          ingredientandMeasures.push(`${api[0][str]} - ${api[0][measure]}`);
-        }
+    for (let index = 1; index < NUMBER_TWEENTY; index += 1) {
+      const str = `strIngredient${index}`;
+      const measure = `strMeasure${index}`;
+      if (api[0][str] !== '' && api[0][str] !== null) {
+        ingredientandMeasures.push(`${api[0][str]} - ${api[0][measure]}`);
       }
     }
     return ingredientandMeasures;
   };
-
-  console.log(api);
 
   const saveLocal = () => {
     const doneProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
@@ -62,7 +57,6 @@ function FoodPage(props) {
     history.push(`/comidas/${id}/in-progress`);
   };
 
-  console.log('fora', progress);
   if (loading) return <h1>loading</h1>;
 
   return (
@@ -73,7 +67,7 @@ function FoodPage(props) {
         recomendations={ recomendations }
         url={ url }
       />
-      <div>
+      { !done ? (
         <button
           data-testid="start-recipe-btn"
           className="botton-recipe"
@@ -81,8 +75,7 @@ function FoodPage(props) {
           type="button"
         >
           { progress ? 'Continuar Receita' : 'Iniciar Receita' }
-        </button>
-      </div>
+        </button>) : null }
     </>
   );
 }
