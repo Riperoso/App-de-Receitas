@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import RecomendationsCard from './RecomendationsCard';
 
 function DetailPageDrink({ api, nameandMeasure, recomendations, url }) {
+  const [message, setMessage] = useState(false);
   const MAX_RECOMENDATIONS = 6;
 
   return (
@@ -18,10 +19,11 @@ function DetailPageDrink({ api, nameandMeasure, recomendations, url }) {
         // Gary Vernon Grubb
         onClick={ () => {
           window.navigator.clipboard.writeText(`http://localhost:3000${url}`);
-          global.alert('Link Copiado!');
+          setMessage(true);
         } }
       >
         <img src={ shareIcon } alt="Compartilhar" />
+        { message && <p>Link copiado!</p> }
       </button>
       <button type="button" data-testid="favorite-btn">
         <img src={ whiteHeartIcon } alt="botão de favoritar" />
@@ -30,7 +32,10 @@ function DetailPageDrink({ api, nameandMeasure, recomendations, url }) {
       <h4 data-testid="recipe-category">{api.strAlcoholic}</h4>
       <ul>
         {nameandMeasure()
-          .map((ingredient) => <li key={ ingredient }>{ingredient}</li>)}
+          .map((ingredient, index) => (
+            <li data-testid={ `${index}-ingredient-name-and-measure` } key={ ingredient }>
+              {ingredient}
+            </li>))}
       </ul>
       <p data-testid="instructions">{api.strInstructions}</p>
       <div className="carousel-div">
