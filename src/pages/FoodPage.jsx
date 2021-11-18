@@ -10,7 +10,7 @@ function FoodPage(props) {
   const { match: { url } } = props;
   const history = useHistory();
   const { getLocal, progress, done } = useContext(GlobalContext);
-
+  console.log('comidasdone', done);
   const [api, saveApi] = useState({});
   const [recomendations, setRecomendations] = useState({});
   const [loading, setLoading] = useState(true);
@@ -26,10 +26,10 @@ function FoodPage(props) {
 
   useEffect(() => {
     (async () => {
-      getLocal(id, 'meals');
       const response = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
       const resolve = await response.json();
       setRecomendations(resolve);
+      getLocal(id, 'meals');
     })();
   }, []);
 

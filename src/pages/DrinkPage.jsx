@@ -11,7 +11,7 @@ function DrinkPage(props) {
 
   const history = useHistory();
   const { getLocal, progress, done } = useContext(GlobalContext);
-
+  console.log('done', done);
   const [api, saveApi] = useState({});
   const [recomendations, setRecomendations] = useState({});
   const [loading, setLoading] = useState(true);

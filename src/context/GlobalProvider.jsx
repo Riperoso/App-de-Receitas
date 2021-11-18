@@ -39,13 +39,12 @@ function GlobalProvider({ children }) {
     const doneLocal = JSON.parse(localStorage.getItem('doneRecipes'));
     const doneProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
     if (doneLocal !== null) {
-      const findDone = doneLocal !== null
-      && doneLocal.find((recipeId) => recipeId[id] === id);
-      if (findDone !== undefined) { setDone(true); }
+      const findDone = doneLocal.find((recipeId) => recipeId.id === id);
+      if (findDone) { setDone(true); }
     }
     if (doneProgress !== null) {
       const findinProgress = doneProgress !== null ? doneProgress[type][id] : null;
-      if (findinProgress !== undefined) setprogress(true);
+      if (findinProgress !== undefined) { setprogress(true); }
     }
   };
 

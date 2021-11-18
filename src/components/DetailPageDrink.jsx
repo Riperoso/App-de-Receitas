@@ -10,6 +10,10 @@ function DetailPageDrink({ api, nameandMeasure, recomendations, url }) {
   const [isFavorite, setisFavorite] = useState(false);
   const MAX_RECOMENDATIONS = 6;
 
+  if (!JSON.parse(localStorage.getItem('favoriteRecipes'))) {
+    localStorage.setItem('favoriteRecipes', JSON.stringify([]));
+  }
+
   const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
   useEffect(() => {
     if (favoriteRecipes !== null) {
@@ -60,11 +64,13 @@ function DetailPageDrink({ api, nameandMeasure, recomendations, url }) {
       </button>
       <button
         type="button"
-        data-testid="favorite-btn"
         onClick={ saveFavorite }
       >
-        { isFavorite ? <img src={ blackHeartIcon } alt="botão de favoritar" />
-          : <img src={ whiteHeartIcon } alt="botão de favoritar" />}
+        <img
+          data-testid="favorite-btn"
+          src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
+          alt="botão de favoritar"
+        />
       </button>
       <h4 data-testid="recipe-category">{api.strCategory}</h4>
       <h4 data-testid="recipe-category">{api.strAlcoholic}</h4>
