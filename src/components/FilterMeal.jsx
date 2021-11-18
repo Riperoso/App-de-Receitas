@@ -7,7 +7,7 @@ function FilterMeal() {
   const MAX_MAP = 5;
 
   const handleClick = async (category) => {
-    if (saveCate === category) {
+    if (saveCate === category || category === 'All') {
       fetchRecipes('themealdb');
       setSaveCate('');
     } else {
@@ -31,6 +31,13 @@ function FilterMeal() {
             {category.strCategory}
           </button>
         )))}
+      <button
+        type="button"
+        data-testid="All-category-filter"
+        onClick={ () => handleClick('All') }
+      >
+        All
+      </button>
     </div>
   );
 }
