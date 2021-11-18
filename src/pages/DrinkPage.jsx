@@ -21,7 +21,6 @@ function DrinkPage(props) {
       const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
       const resolve = await response.json();
       saveApi(resolve.drinks);
-      getLocal(id, 'cocktails');
       setLoading(false);
     })();
   }, []);
@@ -31,7 +30,7 @@ function DrinkPage(props) {
       const responseRec = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
       const resolveRec = await responseRec.json();
       setRecomendations(resolveRec);
-      setLoading(false);
+      getLocal(id, 'cocktails');
     })();
   }, []);
 
