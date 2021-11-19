@@ -10,8 +10,8 @@ function DrinkPage(props) {
   const { match: { url } } = props;
 
   const history = useHistory();
-  const { getLocal, progress } = useContext(GlobalContext);
-
+  const { getLocal, progress, done } = useContext(GlobalContext);
+  console.log('done', done);
   const [api, saveApi] = useState({});
   const [recomendations, setRecomendations] = useState({});
   const [loading, setLoading] = useState(true);
@@ -37,13 +37,11 @@ function DrinkPage(props) {
   const nameandMeasures = () => {
     const ingredientandMeasures = [];
     const NUMBER_TWEENTY = 20;
-    if (api !== undefined) {
-      for (let index = 1; index < NUMBER_TWEENTY; index += 1) {
-        const str = `strIngredient${index}`;
-        const measure = `strMeasure${index}`;
-        if (api[0][str] !== undefined && api[0][str] !== null) {
-          ingredientandMeasures.push(`${api[0][str]} - ${api[0][measure]}`);
-        }
+    for (let index = 1; index < NUMBER_TWEENTY; index += 1) {
+      const str = `strIngredient${index}`;
+      const measure = `strMeasure${index}`;
+      if (api[0][str] !== undefined && api[0][str] !== null) {
+        ingredientandMeasures.push(`${api[0][str]} - ${api[0][measure]}`);
       }
     }
     return ingredientandMeasures;
@@ -70,14 +68,16 @@ function DrinkPage(props) {
         recomendations={ recomendations }
         url={ url }
       />
-      <button
-        data-testid="start-recipe-btn"
-        className="botton-recipe"
-        onClick={ () => saveLocal() }
-        type="button"
-      >
-        { progress ? 'Continuar Receita' : 'Iniciar Receita' }
-      </button>
+      <div className={ done ? 'hidden' : 'visible' }>
+        <button
+          data-testid="start-recipe-btn"
+          className="botton-recipe"
+          onClick={ () => saveLocal() }
+          type="button"
+        >
+          { progress ? 'Continuar Receita' : 'Iniciar Receita' }
+        </button>
+      </div>
     </>
   );
 }

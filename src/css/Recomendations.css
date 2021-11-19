@@ -15,3 +15,11 @@
   bottom: 0;
   position: fixed;
 }
+
+.visible {
+  visibility: visible;
+}
+
+.hidden {
+  visibility: hidden;
+}

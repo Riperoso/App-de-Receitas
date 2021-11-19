@@ -1,12 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 import RecomendationsCard from './RecomendationsCard';
 
 function DetailPage({ api, nameandMeasure, recomendations, url }) {
   const [message, setMessage] = useState(false);
+  const [isFavorite, setisFavorite] = useState(false);
   const MAX_RECOMENDATIONS = 6;
+
+  if (!JSON.parse(localStorage.getItem('favoriteRecipes'))) {
+    localStorage.setItem('favoriteRecipes', JSON.stringify([]));
+  }
+  const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
+
+  useEffect(() => {
+    if (favoriteRecipes !== null) {
+      const findFav = favoriteRecipes !== null
+      && favoriteRecipes.find((recipeId) => recipeId.id === api.idMeal);
+      console.log(findFav);
+      if (findFav) { setisFavorite(true); }
+    }
+  }, []);
+
+  const saveFavorite = () => {
+    if (!isFavorite) {
+      const fav = [...favoriteRecipes, {
+        id: api.idMeal,
+        type: 'comida',
+        area: api.strArea,
+        category: api.strCategory,
+        alcoholicOrNot: '',
+        name: api.strMeal,
+        image: api.strMealThumb,
+      }];
+      localStorage.setItem('favoriteRecipes', JSON.stringify(fav));
+      setisFavorite(true);
+    } else {
+      const filtredFav = favoriteRecipes
+        .filter((favRecipe) => favRecipe.id !== api.idMeal);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(filtredFav));
+      setisFavorite(false);
+    }
+  };
+
   return (
     <>
       <img data-testid="recipe-photo" src={ api.strMealThumb } alt={ api.Meal } />
@@ -24,8 +62,15 @@ function DetailPage({ api, nameandMeasure, recomendations, url }) {
         <img src={ shareIcon } alt="Compartilhar" />
         { message && <p>Link copiado!</p> }
       </button>
-      <button type="button" data-testid="favorite-btn">
-        <img src={ whiteHeartIcon } alt="botão de favoritar" />
+      <button
+        type="button"
+        onClick={ saveFavorite }
+      >
+        <img
+          data-testid="favorite-btn"
+          src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
+          alt="botão de favoritar"
+        />
       </button>
       <h4 data-testid="recipe-category">{api.strCategory}</h4>
       <ul>
