@@ -1,40 +1,63 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 import '../css/recipeProgress.css';
+import GlobalContext from '../context/GlobalContext';
+
+if (!JSON.parse(localStorage.getItem('inProgressRecipes'))) {
+  localStorage.setItem('inProgressRecipes', JSON.stringify({ cocktails: {},
+    meals: {} }));
+}
+if (!JSON.parse(localStorage.getItem('favoriteRecipes'))) {
+  localStorage.setItem('favoriteRecipes', JSON.stringify([]));
+}
 
 function FoodInProgress({ match: { params: { id } } }) {
+  const { listIngredient, isFavorite,
+    saveFavoriteMeal, setisFavorite } = useContext(GlobalContext);
   const [api, saveApi] = useState({});
+  const [message, setMessage] = useState(false);
   const [check, setCheck] = useState({
     ingredientName: '',
     checked: '',
   });
 
-  const { checked, ingredientName } = check;
+  const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
 
-  const apiFor = () => {
-    const ingredientsList = [];
-    const NUMBER_TWEENTY = 20;
-    if (api.meals !== undefined) {
-      for (let index = 1; index < NUMBER_TWEENTY; index += 1) {
-        const str = `strIngredient${index}`;
-        ingredientsList.push(api.meals[0][str]);
-      }
-    }
-    return ingredientsList;
-  };
+  const progressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
+  const { checked, ingredientName } = check;
 
   useEffect(() => {
     (async () => {
+      setisFavorite(false);
       const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
       const resolve = await response.json();
       saveApi(resolve);
+      const findFav = favoriteRecipes !== null
+      && favoriteRecipes.find((recipeId) => recipeId.id === resolve.meals[0].idMeal);
+      if (findFav) { setisFavorite(true); }
     })();
   }, [id]);
 
   const handleClick = ({ target }) => {
-    setCheck({ ...check, ingredientName: target.name, checked: target.checked });
+    setCheck({ ingredientName: target.name, checked: target.checked });
+    if (progressRecipes !== null && target.checked) {
+      console.log(progressRecipes);
+      const progressRecipe = { ...progressRecipes,
+        meals:
+         { ...progressRecipes.meals,
+           [id]: [...progressRecipes.meals[id],
+             target.name] } };
+      localStorage.setItem('inProgressRecipes', JSON.stringify(progressRecipe));
+    } else {
+      const filtredProgress = progressRecipes.meals[id]
+        .filter((progressRecipe) => progressRecipe !== target.name);
+      localStorage.setItem('inProgressRecipes', JSON.stringify({ ...progressRecipes,
+        meals:
+         { ...progressRecipes.meals, [id]: filtredProgress } }));
+    }
   };
 
   const foodProgress = () => (
@@ -45,15 +68,32 @@ function FoodInProgress({ match: { params: { id } } }) {
         alt="recipe name"
       />
       <h2 data-testid="recipe-title">{api.meals[0].strMeal}</h2>
-      <button type="button" data-testid="share-btn">
-        <img src={ shareIcon } alt="botão de compartilhar" />
+      <button
+        type="button"
+        data-testid="share-btn"
+        // https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
+        // Gary Vernon Grubb
+        onClick={ () => {
+          window.navigator.clipboard.writeText(`http://localhost:3000${id}`);
+          setMessage(true);
+        } }
+      >
+        <img src={ shareIcon } alt="Compartilhar" />
+        { message && <p>Link copiado!</p> }
       </button>
-      <button type="button" data-testid="favorite-btn">
-        <img src={ whiteHeartIcon } alt="botão de favoritar" />
+      <button
+        type="button"
+        onClick={ () => saveFavoriteMeal(api.meals[0]) }
+      >
+        <img
+          data-testid="favorite-btn"
+          src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
+          alt="botão de favoritar"
+        />
       </button>
       <h4 data-testid="recipe-category">{api.meals[0].strCategory}</h4>
       <div>
-        { apiFor().map((ingredient, index) => (
+        { listIngredient(api, 'meals').map((ingredient, index) => (
           ingredient !== '' && ingredient !== null && (
             <label
               data-testid={ `${index}-ingredient-step` }
