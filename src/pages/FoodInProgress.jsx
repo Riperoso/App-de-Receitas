@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
@@ -20,6 +21,7 @@ function FoodInProgress({ match: { params: { id } } }) {
   const [api, saveApi] = useState({});
   const [message, setMessage] = useState(false);
   const [check, setCheck] = useState([]);
+  const history = useHistory();
 
   const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
 
@@ -42,7 +44,6 @@ function FoodInProgress({ match: { params: { id } } }) {
   }, [id]);
 
   const handleClick = ({ target }) => {
-    console.log(progressRecipes.meals[id][target.name]);
     setCheck({ ...check, [target.name]: target.checked });
     const progressRecipe = { ...progressRecipes,
       meals:
@@ -92,7 +93,7 @@ function FoodInProgress({ match: { params: { id } } }) {
       <h4 data-testid="recipe-category">{api.meals[0].strCategory}</h4>
       <div>
         { listIngredient(api, 'meals').map((ingredient, index) => (
-          ingredient !== '' && (
+          ingredient !== undefined && (
             <label
               data-testid={ `${index}-ingredient-step` }
               htmlFor={ ingredient }
@@ -114,11 +115,12 @@ function FoodInProgress({ match: { params: { id } } }) {
         {api.meals[0].strInstructions}
       </p>
       <button
+        onClick={ () => history.push('/receitas-feitas') }
         type="button"
-        className={ (() => {
+        disabled={ (() => {
           const checkvalue = Object.values(check)
             .some((ingredient) => ingredient === false);
-          return checkvalue && 'check-btn';
+          return checkvalue;
         })() }
         data-testid="finish-recipe-btn"
       >

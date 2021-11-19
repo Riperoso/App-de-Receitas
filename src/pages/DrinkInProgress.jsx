@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
@@ -23,6 +24,7 @@ function DrinkInProgress({ match: { params: { id } } }) {
     ingredientName: '',
     checked: '',
   });
+  const history = useHistory();
 
   const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
 
@@ -45,7 +47,6 @@ function DrinkInProgress({ match: { params: { id } } }) {
   }, []);
 
   const handleClick = ({ target }) => {
-    console.log(progressRecipes.cocktails[id][target.name]);
     setCheck({ ...check, [target.name]: target.checked });
     const progressRecipe = { ...progressRecipes,
       cocktails:
@@ -115,11 +116,12 @@ function DrinkInProgress({ match: { params: { id } } }) {
         {api.drinks[0].strInstructions}
       </p>
       <button
+        onClick={ () => history.push('/receitas-feitas') }
         type="button"
-        className={ (() => {
+        disabled={ (() => {
           const checkvalue = Object.values(check)
             .some((ingredient) => ingredient === false);
-          return checkvalue && 'check-btn';
+          return checkvalue;
         })() }
         data-testid="finish-recipe-btn"
       >
