@@ -28,8 +28,6 @@ function DrinkInProgress({ match: { params: { id } } }) {
 
   const progressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
 
-  const { checked, ingredientName } = check;
-
   useEffect(() => {
     (async () => {
       setisFavorite(false);
