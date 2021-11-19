@@ -35,9 +35,11 @@ function FavoriteCard({ index, favorite, setUpdate }) {
       <p data-testid={ `${index}-horizontal-top-text` }>
         {horizontalTopText}
       </p>
-      <h3 data-testid={ `${index}-horizontal-name` }>
-        {name}
-      </h3>
+      <Link to={ type === 'comida' ? `/comidas/${id}` : `/bebidas/${id}` }>
+        <h3 data-testid={ `${index}-horizontal-name` }>
+          {name}
+        </h3>
+      </Link>
       <button
         type="button"
         onClick={ () => handleClick(type, id) }
@@ -70,22 +72,3 @@ FavoriteCard.propTypes = {
 };
 
 export default FavoriteCard;
-
-// {
-//   id: '52771',
-//   type: 'comida',
-//   area: 'Italian',
-//   category: 'Vegetarian',
-//   alcoholicOrNot: '',
-//   name: 'Spicy Arrabiata Penne',
-//   image: 'https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg',
-// },
-// {
-//   id: '178319',
-//   type: 'bebida',
-//   area: '',
-//   category: 'Cocktail',
-//   alcoholicOrNot:  'Alcoholic',
-//   name: 'Aquamarine',
-//   image: 'https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg',
-// },
