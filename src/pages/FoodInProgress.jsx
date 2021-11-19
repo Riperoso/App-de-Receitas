@@ -19,15 +19,11 @@ function FoodInProgress({ match: { params: { id } } }) {
     saveFavoriteMeal, setisFavorite } = useContext(GlobalContext);
   const [api, saveApi] = useState({});
   const [message, setMessage] = useState(false);
-  const [check, setCheck] = useState({
-    ingredientName: '',
-    checked: '',
-  });
+  const [check, setCheck] = useState([]);
 
   const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
 
   const progressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
-  const { checked, ingredientName } = check;
 
   useEffect(() => {
     (async () => {
@@ -38,25 +34,27 @@ function FoodInProgress({ match: { params: { id } } }) {
       const findFav = favoriteRecipes !== null
       && favoriteRecipes.find((recipeId) => recipeId.id === resolve.meals[0].idMeal);
       if (findFav) { setisFavorite(true); }
+      setCheck(listIngredient(resolve, 'meals')
+        .reduce((acc, curr) => ({ ...acc, [curr]: false }), {}));
+      localStorage.setItem('inProgressRecipes', JSON.stringify({ cocktails: {},
+        meals: { [id]: check } }));
     })();
   }, [id]);
 
   const handleClick = ({ target }) => {
-    setCheck({ ingredientName: target.name, checked: target.checked });
+    console.log(progressRecipes.meals[id][target.name]);
+    setCheck({ ...check, [target.name]: target.checked });
+    const progressRecipe = { ...progressRecipes,
+      meals:
+       { ...progressRecipes.meals,
+         [id]: [
+           { ...check, [target.name]: target.checked }] } };
     if (progressRecipes !== null && target.checked) {
       console.log(progressRecipes);
-      const progressRecipe = { ...progressRecipes,
-        meals:
-         { ...progressRecipes.meals,
-           [id]: [...progressRecipes.meals[id],
-             target.name] } };
+
       localStorage.setItem('inProgressRecipes', JSON.stringify(progressRecipe));
     } else {
-      const filtredProgress = progressRecipes.meals[id]
-        .filter((progressRecipe) => progressRecipe !== target.name);
-      localStorage.setItem('inProgressRecipes', JSON.stringify({ ...progressRecipes,
-        meals:
-         { ...progressRecipes.meals, [id]: filtredProgress } }));
+      localStorage.setItem('inProgressRecipes', JSON.stringify(progressRecipe));
     }
   };
 
@@ -94,12 +92,12 @@ function FoodInProgress({ match: { params: { id } } }) {
       <h4 data-testid="recipe-category">{api.meals[0].strCategory}</h4>
       <div>
         { listIngredient(api, 'meals').map((ingredient, index) => (
-          ingredient !== '' && ingredient !== null && (
+          ingredient !== '' && (
             <label
               data-testid={ `${index}-ingredient-step` }
               htmlFor={ ingredient }
               key={ `checkbox-${index}` }
-              className={ checked && ingredientName === ingredient && 'recipeProgress' }
+              className={ check[ingredient] === true && 'recipeProgress' }
             >
               {ingredient}
               <input
@@ -115,7 +113,18 @@ function FoodInProgress({ match: { params: { id } } }) {
         <h2>Instructions</h2>
         {api.meals[0].strInstructions}
       </p>
-      <button type="button" data-testid="finish-recipe-btn">Finalizar receita</button>
+      <button
+        type="button"
+        className={ (() => {
+          const checkvalue = Object.values(check)
+            .some((ingredient) => ingredient === false);
+          return checkvalue && 'check-btn';
+        })() }
+        data-testid="finish-recipe-btn"
+      >
+        Finalizar receita
+
+      </button>
     </div>
   );
 

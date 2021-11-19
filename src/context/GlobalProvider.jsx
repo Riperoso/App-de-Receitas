@@ -55,7 +55,12 @@ function GlobalProvider({ children }) {
     if (api[type] !== undefined) {
       for (let index = 1; index < NUMBER_TWEENTY; index += 1) {
         const str = `strIngredient${index}`;
-        ingredientsList.push(api[type][0][str]);
+
+        if (api[type][0][str] !== ''
+        && api[type][0][str] !== null && api[type][0][str] !== undefined) {
+          ingredientsList
+            .push(api[type][0][str]);
+        }
       }
     }
     return ingredientsList;
