@@ -36,7 +36,7 @@ function RecipesDone() {
           All
         </button>
       </div>
-      {getStorage()
+      {getStorage() !== null && getStorage()
         .filter((favorite) => (filter === 'all' ? favorite : favorite.type === filter))
         .map((rec, index) => (
           <RecipesDoneCard key={ index } index={ index } recipe={ rec } />

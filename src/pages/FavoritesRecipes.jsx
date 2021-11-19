@@ -40,7 +40,7 @@ function FavoritesRecipes() {
         </button>
       </div>
 
-      { getStorage()
+      { getStorage() !== null && getStorage()
         .filter((favorite) => (filter === 'all' ? favorite : favorite.type === filter))
         .map((favorite, index) => (
           <FavoriteCard
