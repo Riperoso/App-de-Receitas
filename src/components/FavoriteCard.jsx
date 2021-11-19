@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import P from 'prop-types';
+import { Link } from 'react-router-dom';
 import clipboardCopy from 'clipboard-copy';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
@@ -24,11 +25,13 @@ function FavoriteCard({ index, favorite, setUpdate }) {
 
   return (
     <div>
-      <img
-        src={ image }
-        alt={ name }
-        data-testid={ `${index}-horizontal-image` }
-      />
+      <Link to={ type === 'comida' ? `/comidas/${id}` : `/bebidas/${id}` }>
+        <img
+          src={ image }
+          alt={ name }
+          data-testid={ `${index}-horizontal-image` }
+        />
+      </Link>
       <p data-testid={ `${index}-horizontal-top-text` }>
         {horizontalTopText}
       </p>
