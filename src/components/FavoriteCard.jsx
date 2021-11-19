@@ -1,29 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import P from 'prop-types';
+import clipboardCopy from 'clipboard-copy';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 
-function FavoriteCard({ id, favorite }) {
-  const { type, area, category, alcoholicOrNot, name, image } = favorite;
+function FavoriteCard({ index, favorite }) {
+  const [shouldRenderMessage, setShouldRenderMEssage] = useState(false);
+  const { type, area, category, alcoholicOrNot, name, image, id } = favorite;
   const horizontalTopText = type === 'comida' ? `${area} - ${category}` : alcoholicOrNot;
+
+  const handleClick = async (group, idRef) => {
+    const url = group === 'comida' ? `/comidas/${idRef}` : `/bebidas/${idRef}`;
+    await clipboardCopy(`http://localhost:3000${url}`);
+    setShouldRenderMEssage(true);
+  };
+
   return (
     <div>
       <img
         src={ image }
         alt={ name }
-        data-testid={ `${id}-horizontal-image` }
+        data-testid={ `${index}-horizontal-image` }
       />
-      <p data-testid={ `${id}-horizontal-top-text` }>
+      <p data-testid={ `${index}-horizontal-top-text` }>
         {horizontalTopText}
       </p>
-      <h3 data-testid={ `${id}-horizontal-name` }>
+      <h3 data-testid={ `${index}-horizontal-name` }>
         {name}
       </h3>
       <button
         type="button"
+        onClick={ () => handleClick(type, id) }
       >
         <img
-          data-testid={ `${id}-horizontal-share-btn` }
+          data-testid={ `${index}-horizontal-share-btn` }
           src={ shareIcon }
           alt="Share Icon"
         />
@@ -32,17 +42,18 @@ function FavoriteCard({ id, favorite }) {
         type="button"
       >
         <img
-          data-testid={ `${id}-horizontal-favorite-btn` }
+          data-testid={ `${index}-horizontal-favorite-btn` }
           src={ blackHeartIcon }
           alt="Black Heart Icon"
         />
       </button>
+      { shouldRenderMessage && 'Link copiado!' }
     </div>
   );
 }
 
 FavoriteCard.propTypes = {
-  id: P.number.isRequired,
+  index: P.number.isRequired,
   favorite: P.objectOf(P.any).isRequired,
 };
 

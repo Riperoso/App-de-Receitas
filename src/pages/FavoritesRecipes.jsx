@@ -17,7 +17,7 @@ function FavoritesRecipes() {
         <button type="button" data-testid="filter-by-all-btn">All</button>
       </div>
       { getStorage().map((favorite, index) => (
-        <FavoriteCard key={ index } id={ index } favorite={ favorite } />
+        <FavoriteCard key={ index } index={ index } favorite={ favorite } />
       ))}
     </div>
   );
