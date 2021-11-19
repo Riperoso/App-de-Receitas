@@ -31,6 +31,7 @@ function RecipesDoneCard({ index, recipe }) {
         to={ type === 'comida' ? `/comidas/${id}` : `/bebidas/${id}` }
       >
         <img
+          style={ { width: '150px' } }
           src={ image }
           alt={ name }
           data-testid={ `${index}-horizontal-image` }
