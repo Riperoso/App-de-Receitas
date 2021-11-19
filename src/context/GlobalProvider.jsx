@@ -15,6 +15,7 @@ function GlobalProvider({ children }) {
   const [filtredMealsByCategory, setFiltredMealsByCategory] = useState([]);
   const [filtredDrinksByCategory, setFiltredDrinksByCategory] = useState([]);
   const [showBar, setShowBar] = useState(false);
+  const [isFavorite, setisFavorite] = useState(false);
 
   const fetchRecipes = async (param) => {
     const response = await fetch(`https://www.${param}.com/api/json/v1/1/search.php?s=`);
@@ -49,19 +50,66 @@ function GlobalProvider({ children }) {
     }
   };
 
-  const nameandMeasures = (api) => {
-    const ingredientandMeasures = [];
+  const listIngredient = (api, type) => {
+    const ingredientsList = [];
     const NUMBER_TWEENTY = 20;
-    if (api !== undefined) {
+    if (api[type] !== undefined) {
       for (let index = 1; index < NUMBER_TWEENTY; index += 1) {
         const str = `strIngredient${index}`;
-        const measure = `strMeasure${index}`;
-        if (api[0][str] !== undefined && api[0][str] !== null) {
-          ingredientandMeasures.push(`${api[0][str]} - ${api[0][measure]}`);
-        }
+        ingredientsList.push(api[type][0][str]);
       }
     }
-    return ingredientandMeasures;
+    return ingredientsList;
+  };
+
+  const saveFavoriteMeal = (api) => {
+    if (!JSON.parse(localStorage.getItem('favoriteRecipes'))) {
+      localStorage.setItem('favoriteRecipes', JSON.stringify([]));
+    }
+    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    if (!isFavorite) {
+      const fav = [...favoriteRecipes, {
+        id: api.idMeal,
+        type: 'comida',
+        area: api.strArea,
+        category: api.strCategory,
+        alcoholicOrNot: '',
+        name: api.strMeal,
+        image: api.strMealThumb,
+      }];
+      localStorage.setItem('favoriteRecipes', JSON.stringify(fav));
+      setisFavorite(true);
+    } else {
+      const filtredFav = favoriteRecipes
+        .filter((favRecipe) => favRecipe.id !== api.idMeal);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(filtredFav));
+      setisFavorite(false);
+    }
+  };
+
+  const saveFavoriteDrink = (api) => {
+    if (!JSON.parse(localStorage.getItem('favoriteRecipes'))) {
+      localStorage.setItem('favoriteRecipes', JSON.stringify([]));
+    }
+    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    if (!isFavorite) {
+      const fav = [...favoriteRecipes, {
+        id: api.idDrink,
+        type: 'bebida',
+        area: '',
+        category: api.strCategory,
+        alcoholicOrNot: api.strAlcoholic,
+        name: api.strDrink,
+        image: api.strDrinkThumb,
+      }];
+      localStorage.setItem('favoriteRecipes', JSON.stringify(fav));
+      setisFavorite(true);
+    } else {
+      const filtredFav = favoriteRecipes
+        .filter((favRecipe) => favRecipe.id !== api.idDrink);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(filtredFav));
+      setisFavorite(false);
+    }
   };
 
   return (
@@ -75,7 +123,6 @@ function GlobalProvider({ children }) {
         getLocal,
         done,
         progress,
-        nameandMeasures,
         stateEmail,
         setStateEmail,
         setFiltredDrinks,
@@ -89,7 +136,12 @@ function GlobalProvider({ children }) {
         filtredMealsByCategory,
         setFiltredMealsByCategory,
         setFiltredDrinksByCategory,
-        filtredDrinksByCategory } }
+        filtredDrinksByCategory,
+        listIngredient,
+        isFavorite,
+        saveFavoriteMeal,
+        saveFavoriteDrink,
+        setisFavorite } }
     >
       { children }
     </GlobalContext.Provider>
