@@ -39,9 +39,13 @@ function RecipesDoneCard({ index, recipe }) {
       <p data-testid={ `${index}-horizontal-top-text` }>
         { type === 'comida' ? `${area} - ${category}` : alcoholicOrNot}
       </p>
-      <h3 data-testid={ `${index}-horizontal-name` }>
-        { name }
-      </h3>
+      <Link
+        to={ type === 'comida' ? `/comidas/${id}` : `/bebidas/${id}` }
+      >
+        <h3 data-testid={ `${index}-horizontal-name` }>
+          { name }
+        </h3>
+      </Link>
       <p data-testid={ `${index}-horizontal-done-date` }>
         { doneDate }
       </p>
