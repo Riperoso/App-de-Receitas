@@ -1,4 +1,9 @@
 import React, { useContext, useState } from 'react';
+import {
+  ButtonGroup,
+  Button,
+  Container,
+} from '@material-ui/core';
 import GlobalContext from '../context/GlobalContext';
 
 function FilterDrink() {
@@ -19,26 +24,37 @@ function FilterDrink() {
   };
 
   return (
-    <div>
-      {categoryDrinks.drinks && categoryDrinks.drinks
-        .map((category, index) => (index < MAX_MAP && (
-          <button
-            type="button"
-            key={ index }
-            data-testid={ `${category.strCategory}-category-filter` }
-            onClick={ () => handleClick(category.strCategory) }
-          >
-            {category.strCategory}
-          </button>
-        )))}
-      <button
-        type="button"
-        data-testid="All-category-filter"
-        onClick={ () => handleClick('All') }
+    <Container 
+      sx={ {
+        marginBottom: 2,
+        marginTop: 2,
+        display: 'flex',
+        justifyContent: 'center',
+    } }>
+      <ButtonGroup
+        size="small"
+        variant="text"
+        sx={ {
+          display: 'flex',
+          flexWrap: 'wrap',
+          maxWidth: '100%',
+        } }
       >
-        All
-      </button>
-    </div>
+        {categoryDrinks.drinks && categoryDrinks.drinks
+          .map((category, index) => (index < MAX_MAP && (
+            <Button
+              onClick={ () => handleClick(category.strCategory) }
+            >
+              {category.strCategory}
+            </Button>
+          )))}
+        <Button
+          onClick={ () => handleClick('All') }
+        >
+          All
+        </Button>
+      </ButtonGroup>
+    </Container>
   );
 }
 
